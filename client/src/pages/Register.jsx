@@ -78,6 +78,7 @@ const Register = () => {
         password: inputPassword,
       });
       alert("registration successful - Welcome");
+      console.log(res?.data);
     } catch (error) {
       console.log(error);
       alert("registration failed - try again");

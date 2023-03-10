@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -56,17 +57,54 @@ const RegisterLink = styled(Link)`
 `;
 
 const Login = () => {
-  const submitHandler = (e) => {
+  const [inputEmail, setInputEmail] = useState("");
+  const [inputPassword, setInputPassword] = useState("");
+  const [redirect, setRedirect] = useState(false);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("submitted");
+
+    // make request to server
+    try {
+      await axios.post("/login", {
+        email: inputEmail,
+        password: inputPassword,
+      });
+      console.log("login successful");
+      setRedirect(true);
+    } catch (error) {
+      console.log("login failed ");
+      console.log(error);
+    }
+
+    // reset values
+    setInputEmail("");
+    setInputPassword("");
   };
+
+  // redirect if logged in
+  if (redirect) {
+    return <Navigate to="/" replace={true} />;
+  }
 
   return (
     <Container>
       <PageTitle className="text-4xl text-center mb-4">Login</PageTitle>
-      <Form onSubmit={submitHandler}>
-        <FormInput type="email" placeholder="johnDoe@gmail.com" />
-        <FormInput type="password" placeholder="enter password" />
+      <Form onSubmit={handleLogin}>
+        <FormInput
+          type="email"
+          placeholder="johnDoe@gmail.com"
+          name="email"
+          value={inputEmail}
+          onChange={(e) => setInputEmail(e.target.value)}
+        />
+        <FormInput
+          type="password"
+          placeholder="enter password"
+          name="password"
+          value={inputPassword}
+          onChange={(e) => setInputPassword(e.target.value)}
+        />
         <FormButton>Login</FormButton>
         <RegisterContainer>
           Don't have an account yet?
