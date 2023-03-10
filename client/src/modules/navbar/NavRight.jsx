@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaUserCircle } from "react-icons/fa";
+import UserContext from "../../utilities/context/userContext";
 
 const Container = styled(Link)`
   display: flex;
@@ -12,6 +13,7 @@ const Container = styled(Link)`
   align-items: center;
   border: solid 1px #dddddd;
   height: 42px;
+  text-decoration: none;
 `;
 
 const Hamburger = styled(RxHamburgerMenu)`
@@ -24,11 +26,18 @@ const UserIcon = styled(FaUserCircle)`
   color: #717171;
 `;
 
+const UserName = styled.span`
+  font-size: 12px;
+  color: #242424;
+`;
+
 const NavRight = () => {
+  const { user } = useContext(UserContext);
   return (
-    <Container to="/login">
+    <Container to={!!user ? "/account" : "/login"}>
       <Hamburger />
       <UserIcon />
+      {!!user && <UserName>{user.name}</UserName>}
     </Container>
   );
 };

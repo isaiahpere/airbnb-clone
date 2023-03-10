@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
+import UserContext from "../utilities/context/userContext";
 
 const Container = styled.div`
   display: flex;
@@ -57,20 +58,27 @@ const RegisterLink = styled(Link)`
 `;
 
 const Login = () => {
+  // state
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
+
+  // context
+  const { user, setUser } = useContext(UserContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     // make request to server
     try {
-      await axios.post("/login", {
+      const user = await axios.post("/login", {
         email: inputEmail,
         password: inputPassword,
       });
-      console.log("login successful");
+
+      // set user to userContext
+      setUser(user?.data);
+
       setRedirect(true);
     } catch (error) {
       console.log("login failed ");
@@ -81,6 +89,11 @@ const Login = () => {
     setInputEmail("");
     setInputPassword("");
   };
+
+  if (user) {
+    console.log("the user is :");
+    console.log(user);
+  }
 
   // redirect if logged in
   if (redirect) {

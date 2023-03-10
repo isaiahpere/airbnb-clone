@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const User = require("./models/User");
 const bcrypt = require("bcryptjs");
@@ -17,6 +18,8 @@ const jwtSecret = process.env.JWT_SECRET;
 
 // json body parser
 app.use(bodyParser.json());
+// parse token from cookie
+app.use(cookieParser());
 
 // cors the client url
 app.use(
@@ -36,6 +39,26 @@ app.get("/login", (req, res) => {
   res.send("hello from login");
 });
 
+//  GET
+app.get("/profile", async (req, res) => {
+  try {
+    // check token exist
+    const { token } = req.cookies;
+    if (!token) throw new Error("no jwt token provided");
+
+    // verify token
+    const verifiedToken = jwt.verify(token, jwtSecret, {});
+    const { id } = verifiedToken;
+    const user = await User.findById(id);
+    if (user) {
+      return res.json({ name: user.name, email: user.email, id: user._id });
+    }
+    throw new Error("user not found");
+  } catch (error) {
+    res.status(224).json(error.message);
+  }
+});
+
 // POST
 app.post("/login", async (req, res) => {
   // destruct body
@@ -48,24 +71,13 @@ app.post("/login", async (req, res) => {
   if (user) {
     const passOk = bcrypt.compareSync(password, user.password);
     if (passOk) {
-      // if ok send cookie
-      // jwt.sign(
-      //   { email: user.email, id: user._id },
-      //   jwtSecret,
-      //   { expiresIn: "1h" },
-      //   (err, token) => {
-      //     if (err) throw err;
-      //     res.cookie("token", token).json("authenticated");
-      //   }
-      // );
-
       // create token to send in cookie
       const token = jwt.sign({ email: user.email, id: user._id }, jwtSecret, {
         expiresIn: "12h",
       });
 
       if (token) {
-        res.cookie("token", token).json(token);
+        res.cookie("token", token).json(user);
       } else {
         throw new Error("No Token generated -  login [post]");
       }
