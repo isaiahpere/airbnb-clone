@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -56,18 +57,63 @@ const RegisterLink = styled(Link)`
 `;
 
 const Register = () => {
-  const submitHandler = (e) => {
+  // state
+  const [inputName, setInputName] = useState("");
+  const [inputEmail, setInputEmail] = useState("");
+  const [inputPassword, setInputPassword] = useState("");
+
+  const submitHandler = async (e) => {
     e.preventDefault();
     console.log("submitted");
+
+    console.log(`name: ${inputName}`);
+    console.log(`email: ${inputEmail}`);
+    console.log(`pass: ${inputPassword}`);
+
+    // register request
+    try {
+      const res = await axios.post("/register", {
+        name: inputName,
+        email: inputEmail,
+        password: inputPassword,
+      });
+      alert("registration successful - Welcome");
+    } catch (error) {
+      console.log(error);
+      alert("registration failed - try again");
+    }
+
+    // reset values
+    setInputName("");
+    setInputEmail("");
+    setInputPassword("");
   };
 
   return (
     <Container>
-      <PageTitle className="text-4xl text-center mb-4">Register</PageTitle>
+      <PageTitle>Register</PageTitle>
       <Form onSubmit={submitHandler}>
-        <FormInput type="text" placeholder="Name" />
-        <FormInput type="email" placeholder="Email" />
-        <FormInput type="password" placeholder="Password" />
+        <FormInput
+          type="text"
+          placeholder="Name"
+          name="name"
+          value={inputName}
+          onChange={(e) => setInputName(e.target.value)}
+        />
+        <FormInput
+          type="email"
+          placeholder="Email"
+          name="email"
+          value={inputEmail}
+          onChange={(e) => setInputEmail(e.target.value)}
+        />
+        <FormInput
+          type="password"
+          placeholder="Password"
+          name="password"
+          value={inputPassword}
+          onChange={(e) => setInputPassword(e.target.value)}
+        />
         <FormButton>Register</FormButton>
         <RegisterContainer>
           Have an account?
