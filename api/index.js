@@ -53,7 +53,7 @@ app.get("/profile", async (req, res) => {
     if (user) {
       return res.json({ name: user.name, email: user.email, id: user._id });
     }
-    throw new Error("user not found");
+    throw new Error("user not found!");
   } catch (error) {
     res.status(224).json(error.message);
   }
