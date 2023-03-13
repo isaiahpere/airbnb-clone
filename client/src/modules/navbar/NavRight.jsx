@@ -5,7 +5,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { FaUserCircle } from "react-icons/fa";
 import UserContext from "../../utilities/context/userContext";
 
-const Container = styled(Link)`
+const LinkContainer = styled(Link)`
   display: flex;
   gap: 10px;
   padding: 0px 20px;
@@ -32,13 +32,15 @@ const UserName = styled.span`
 `;
 
 const NavRight = () => {
+  // user context
   const { user } = useContext(UserContext);
+
   return (
-    <Container to={!!user ? "/account" : "/login"}>
+    <LinkContainer to={!!user ? "/account" : "/login"}>
       <Hamburger />
       <UserIcon />
       {!!user && <UserName>{user.name}</UserName>}
-    </Container>
+    </LinkContainer>
   );
 };
 

@@ -64,8 +64,9 @@ const Login = () => {
   const [redirect, setRedirect] = useState(false);
 
   // context
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
 
+  // attempt login and add user to userContext
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -76,10 +77,11 @@ const Login = () => {
         password: inputPassword,
       });
 
-      // set user to userContext
-      setUser(user?.data);
-
-      setRedirect(true);
+      // set user and redirect
+      if (user.data) {
+        setUser(user?.data);
+        setRedirect(true);
+      }
     } catch (error) {
       console.log("login failed ");
       console.log(error);
@@ -89,11 +91,6 @@ const Login = () => {
     setInputEmail("");
     setInputPassword("");
   };
-
-  if (user) {
-    console.log("the user is :");
-    console.log(user);
-  }
 
   // redirect if logged in
   if (redirect) {

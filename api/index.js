@@ -92,11 +92,16 @@ app.post("/login", async (req, res) => {
 
 // POST
 app.post("/register", async (req, res) => {
+  // destruct body
   const { name, email, password } = req.body;
 
   // check email is not used before creating a new one.
-
   try {
+    // if user exist throw error
+    const foundUser = await User.findOne({ email });
+    console.log(foundUser);
+    if (foundUser) throw Error("email already in use");
+
     // create user in database
     const user = await User.create({
       name,

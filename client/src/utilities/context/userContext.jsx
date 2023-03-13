@@ -12,7 +12,7 @@ export const UserContextProvider = ({ children }) => {
       const fetchUser = async () => {
         // sending a cookie if any exist
         const res = await axios.get("/profile");
-        if (res.data) setUser(res.data);
+        if (res.data.email && res.data.id) setUser(res.data);
       };
       fetchUser();
     }
