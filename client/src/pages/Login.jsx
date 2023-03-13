@@ -99,7 +99,7 @@ const Login = () => {
 
   return (
     <Container>
-      <PageTitle className="text-4xl text-center mb-4">Login</PageTitle>
+      <PageTitle className="text-4xl text-center mb-4">Logins</PageTitle>
       <Form onSubmit={handleLogin}>
         <FormInput
           type="email"
