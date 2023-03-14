@@ -1,8 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import { Link, Navigate } from "react-router-dom";
-import axios from "axios";
-import UserContext from "../utilities/context/userContext";
+
+import UserContext from "../../utilities/context/userContext";
 
 const Container = styled.div`
   display: flex;
@@ -57,72 +58,84 @@ const RegisterLink = styled(Link)`
   font-weight: 800;
 `;
 
-const Login = () => {
+const Register = () => {
   // state
+  const [inputName, setInputName] = useState("");
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
 
-  // context
-  const { setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
-  // attempt login and add user to userContext
-  const handleLogin = async (e) => {
+  useEffect(() => {
+    if (user) setRedirect(true);
+  }, [user]);
+
+  // handle form submission
+  const submitHandler = async (e) => {
     e.preventDefault();
+    console.log("submitted");
 
-    // make request to server
+    console.log(`name: ${inputName}`);
+    console.log(`email: ${inputEmail}`);
+    console.log(`pass: ${inputPassword}`);
+
+    // register request
     try {
-      const user = await axios.post("/login", {
+      const res = await axios.post("/register", {
+        name: inputName,
         email: inputEmail,
         password: inputPassword,
       });
-
-      // set user and redirect
-      if (user.data) {
-        setUser(user?.data);
-        setRedirect(true);
-      }
+      alert("registration successful - Welcome");
+      console.log(res?.data);
     } catch (error) {
-      console.log("login failed ");
       console.log(error);
+      alert("registration failed - try again");
     }
 
     // reset values
+    setInputName("");
     setInputEmail("");
     setInputPassword("");
   };
 
-  // redirect if logged in
-  if (redirect) {
-    return <Navigate to="/" replace={true} />;
-  }
+  // redirect if authenticated
+  if (redirect) return <Navigate to="/" />;
 
   return (
     <Container>
-      <PageTitle className="text-4xl text-center mb-4">Login</PageTitle>
-      <Form onSubmit={handleLogin}>
+      <PageTitle>Register</PageTitle>
+      <Form onSubmit={submitHandler}>
+        <FormInput
+          type="text"
+          placeholder="Name"
+          name="name"
+          value={inputName}
+          onChange={(e) => setInputName(e.target.value)}
+        />
         <FormInput
           type="email"
-          placeholder="johnDoe@gmail.com"
+          placeholder="Email"
           name="email"
           value={inputEmail}
           onChange={(e) => setInputEmail(e.target.value)}
         />
         <FormInput
           type="password"
-          placeholder="enter password"
+          placeholder="Password"
           name="password"
           value={inputPassword}
           onChange={(e) => setInputPassword(e.target.value)}
         />
-        <FormButton>Login</FormButton>
+        <FormButton>Register</FormButton>
         <RegisterContainer>
-          Don't have an account yet?
-          <RegisterLink to="/register">Register</RegisterLink>
+          Have an account?
+          <RegisterLink to="/login">Login</RegisterLink>
         </RegisterContainer>
       </Form>
     </Container>
   );
 };
 
-export default Login;
+export default Register;

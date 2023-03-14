@@ -13,6 +13,11 @@ const CustomButton = styled.button`
 
   /* conditional */
   ${(props) =>
+    props.color &&
+    `
+    backgound-color: ${props.color};
+  `}
+  ${(props) =>
     props.radius &&
     `
     border-radius: ${props.radius};
@@ -27,11 +32,36 @@ const CustomButton = styled.button`
     `
     height: ${props.height};
   `}
+  ${(props) =>
+    props.fullWidth &&
+    `
+    width: 100%;
+  `}
+  ${(props) =>
+    props.padding &&
+    `
+    padding: ${props.padding};
+  `}
 `;
 
-const Button = ({ primary, padding, radius, children, width, height }) => {
+const Button = ({
+  color,
+  padding,
+  radius,
+  children,
+  width,
+  height,
+  fullWidth,
+}) => {
   return (
-    <CustomButton height={height} width={width} radius={radius}>
+    <CustomButton
+      color={color}
+      padding={padding}
+      height={height}
+      width={width}
+      radius={radius}
+      fullWidth={fullWidth}
+    >
       {children}
     </CustomButton>
   );

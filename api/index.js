@@ -39,7 +39,7 @@ app.get("/login", (req, res) => {
   res.send("hello from login");
 });
 
-//  GET
+//  GET - auth user with token from browser
 app.get("/profile", async (req, res) => {
   try {
     // check token exist
@@ -59,7 +59,7 @@ app.get("/profile", async (req, res) => {
   }
 });
 
-// POST
+// POST - login user
 app.post("/login", async (req, res) => {
   // destruct body
   const { email, password } = req.body;
@@ -90,7 +90,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// POST
+// POST - register user
 app.post("/register", async (req, res) => {
   // destruct body
   const { name, email, password } = req.body;
@@ -115,6 +115,11 @@ app.post("/register", async (req, res) => {
     console.log(error);
     res.status(422).json(error);
   }
+});
+
+// POST logout user
+app.post("/logout", (req, res) => {
+  res.cookie("token", "").json({ redirect: true });
 });
 
 app.listen(PORT, () => {

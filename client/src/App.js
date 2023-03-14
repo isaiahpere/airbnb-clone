@@ -1,15 +1,17 @@
 import { Routes, Route } from "react-router-dom";
+import { UserContextProvider } from "./utilities/context/userContext";
+import axios from "axios";
 
+import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Layout from "./components/Layout";
-import axios from "axios";
-
-import { UserContextProvider } from "./utilities/context/userContext";
+import Account from "./pages/Account";
+// import Bookings from "./pages/Account/Bookings";
+// import Places from "./pages/Account/Places";
 
 axios.defaults.baseURL = "http://localhost:4000";
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true; // req & send cookies
 
 const App = () => {
   return (
@@ -19,6 +21,9 @@ const App = () => {
           <Route index path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/account/:subpage" element={<Account />} />
+          <Route path="/account/:subpage" element={<Account />} />
         </Route>
       </Routes>
     </UserContextProvider>

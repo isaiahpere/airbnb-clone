@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import axios from "axios";
+import UserContext from "../../utilities/context/userContext";
 
 const Container = styled.div`
   display: flex;
@@ -56,73 +57,77 @@ const RegisterLink = styled(Link)`
   font-weight: 800;
 `;
 
-const Register = () => {
+const Login = () => {
   // state
-  const [inputName, setInputName] = useState("");
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
+  const [redirect, setRedirect] = useState(false);
 
-  const submitHandler = async (e) => {
+  // context
+  const { user, setUser } = useContext(UserContext);
+
+  // check if user is authenticated
+  useEffect(() => {
+    if (user) setRedirect(true);
+  }, [user]);
+
+  // attempt login and add user to userContext
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("submitted");
 
-    console.log(`name: ${inputName}`);
-    console.log(`email: ${inputEmail}`);
-    console.log(`pass: ${inputPassword}`);
-
-    // register request
+    // make request to server
     try {
-      const res = await axios.post("/register", {
-        name: inputName,
+      const user = await axios.post("/login", {
         email: inputEmail,
         password: inputPassword,
       });
-      alert("registration successful - Welcome");
-      console.log(res?.data);
+
+      // set user and redirect
+      if (user.data) {
+        setUser(user?.data);
+        setRedirect(true);
+      }
     } catch (error) {
+      console.log("login failed ");
       console.log(error);
-      alert("registration failed - try again");
     }
 
     // reset values
-    setInputName("");
     setInputEmail("");
     setInputPassword("");
   };
 
+  // redirect if logged in
+  if (redirect) {
+    return <Navigate to="/" replace={true} />;
+  }
+
   return (
     <Container>
-      <PageTitle>Register</PageTitle>
-      <Form onSubmit={submitHandler}>
-        <FormInput
-          type="text"
-          placeholder="Name"
-          name="name"
-          value={inputName}
-          onChange={(e) => setInputName(e.target.value)}
-        />
+      <PageTitle className="text-4xl text-center mb-4">Login</PageTitle>
+      <Form onSubmit={handleLogin}>
         <FormInput
           type="email"
-          placeholder="Email"
+          placeholder="johnDoe@gmail.com"
           name="email"
           value={inputEmail}
           onChange={(e) => setInputEmail(e.target.value)}
         />
         <FormInput
           type="password"
-          placeholder="Password"
+          placeholder="enter password"
           name="password"
           value={inputPassword}
           onChange={(e) => setInputPassword(e.target.value)}
         />
-        <FormButton>Register</FormButton>
+        <FormButton>Login</FormButton>
         <RegisterContainer>
-          Have an account?
-          <RegisterLink to="/login">Login</RegisterLink>
+          Don't have an account yet?
+          <RegisterLink to="/register">Register</RegisterLink>
         </RegisterContainer>
       </Form>
     </Container>
   );
 };
 
-export default Register;
+export default Login;
