@@ -19,3 +19,14 @@ a {
   text-decoration: none;
   color: #242424;
 }
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+textarea {
+  width: 100%;
+  border: solid 1px #dddddd;
+  border-radius: 24px;
+  padding: 10px 20px;
+}

@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 const CustomButton = styled.button`
   font-size: 14px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;

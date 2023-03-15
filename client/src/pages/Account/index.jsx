@@ -1,5 +1,5 @@
 import React, { useState, useContext, Fragment, useEffect } from "react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 
@@ -8,7 +8,7 @@ import AccountNav from "../../modules/account";
 import Profile from "../../modules/account/Profile";
 import Loader from "../../components/globals/Loader";
 import Bookings from "../../modules/account/Bookings";
-import Places from "../../modules/account/Places";
+import Places from "../../modules/account/places";
 
 const Section = styled.div``;
 

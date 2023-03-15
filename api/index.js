@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const User = require("./models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const imageDownloader = require("image-downloader");
 require("dotEnv").config();
 
 // server port
@@ -20,6 +21,8 @@ const jwtSecret = process.env.JWT_SECRET;
 app.use(bodyParser.json());
 // parse token from cookie
 app.use(cookieParser());
+// public folder dir
+app.use("/uploads", express.static(`${__dirname}/uploads`));
 
 // cors the client url
 app.use(
@@ -121,6 +124,23 @@ app.post("/register", async (req, res) => {
 app.post("/logout", (req, res) => {
   res.cookie("token", "").json({ redirect: true });
 });
+
+app.post("/link-uploads", async (req, res) => {
+  const { link } = req.body;
+
+  // append time to photo name
+  const newName = `photo${Date.now()}.jpg`;
+
+  // process photo link
+  await imageDownloader.image({
+    url: link,
+    dest: `${__dirname}/uploads/${newName}`,
+  });
+
+  res.json(newName);
+});
+
+// have to make post request to /uploads
 
 app.listen(PORT, () => {
   console.log(`Server Connection Established on port ${PORT}`);
