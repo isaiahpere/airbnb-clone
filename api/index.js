@@ -8,6 +8,8 @@ const User = require("./models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const imageDownloader = require("image-downloader");
+const multer = require("multer"); // middleware
+const fs = require("fs");
 require("dotEnv").config();
 
 // server port
@@ -140,7 +142,22 @@ app.post("/link-uploads", async (req, res) => {
   res.json(newName);
 });
 
-// have to make post request to /uploads
+const photosMiddleware = multer({ dest: "uploads/" });
+app.post("/upload", photosMiddleware.array("photos", 12), (req, res) => {
+  console.log(req.files);
+  req.files.forEach((file) => {
+    console.log("*******");
+    console.log(file);
+    console.log("*******");
+    // path to append file ext from originalName
+    const { path, originalname } = file;
+    const fileNameParts = originalname.split(".");
+    const fileExtension = fileNameParts[fileNameParts.length - 1];
+    const newPath = `${path}.${fileExtension}`;
+
+    fs.renameSync(path, newPath);
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server Connection Established on port ${PORT}`);

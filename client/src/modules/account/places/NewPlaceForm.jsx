@@ -186,21 +186,22 @@ const NewPlaceForm = () => {
     e.preventDefault();
     // get files
     let files = e.target.files;
-    console.log("files:");
-    console.log(files);
 
     // form multipart data
     const data = new FormData();
-    data.set("photos", files);
+
+    for (let i = 0; i < files.length; i++) {
+      data.append("photos", files[i]);
+      console.log(files[i]);
+    }
+
+    console.log("data");
+    console.log(data);
 
     // send files to backend to upload
-    const { data: fileName } = await axios.post(
-      "/upload",
-      { data },
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
+    const { data: fileName } = await axios.post("/upload", data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
 
     // add photos to state
     setAddedPhotos((prev) => [...prev, fileName]);
@@ -293,7 +294,11 @@ const NewPlaceForm = () => {
           </LinkUploadContainer>
           <PhotosContainer>
             <UploadBox>
-              <FileUploaderInput type="file" onChange={handlePhotoUpload} />
+              <FileUploaderInput
+                type="file"
+                multiple
+                onChange={handlePhotoUpload}
+              />
               <BoxContentContainer>
                 <UploadIcon />
                 <UploadText>Upload</UploadText>
