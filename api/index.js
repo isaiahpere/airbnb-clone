@@ -9,6 +9,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const imageDownloader = require("image-downloader");
 const multer = require("multer"); // middleware
+const multerUploads = multer({ dest: "uploads/" });
 const fs = require("fs");
 require("dotEnv").config();
 
@@ -127,6 +128,7 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json({ redirect: true });
 });
 
+// POST upload photo via Link
 app.post("/link-uploads", async (req, res) => {
   const { link } = req.body;
 
@@ -142,21 +144,21 @@ app.post("/link-uploads", async (req, res) => {
   res.json(newName);
 });
 
-const photosMiddleware = multer({ dest: "uploads/" });
-app.post("/upload", photosMiddleware.array("photos", 12), (req, res) => {
-  console.log(req.files);
-  req.files.forEach((file) => {
-    console.log("*******");
-    console.log(file);
-    console.log("*******");
-    // path to append file ext from originalName
-    const { path, originalname } = file;
-    const fileNameParts = originalname.split(".");
-    const fileExtension = fileNameParts[fileNameParts.length - 1];
-    const newPath = `${path}.${fileExtension}`;
+// POST - upload images via files
+app.post("/upload", multerUploads.array("photos", 12), (req, res) => {
+  const uploadedFiles = [];
 
-    fs.renameSync(path, newPath);
+  req.files.forEach((file) => {
+    // get extension, re-write file with extension & push to array
+    const { path, filename, originalname } = file;
+    const fileExtension = originalname.split(".").slice(-1)[0];
+    // const fileExtension = originalNameParts[fileNameParts.length - 1];
+    const newFilename = `${filename}.${fileExtension}`;
+    fs.renameSync(path, `${path}.${fileExtension}`);
+    uploadedFiles.push(newFilename);
   });
+
+  res.json(uploadedFiles);
 });
 
 app.listen(PORT, () => {

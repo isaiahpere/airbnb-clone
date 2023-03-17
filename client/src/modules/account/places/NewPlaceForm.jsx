@@ -113,12 +113,19 @@ const GridContainer = styled.div`
   gap: 10px;
   margin-top: 24px;
 
+  @media (min-width: 520px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   @media (min-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
   }
-
-  @media (min-width: 1280px) {
+  @media (min-width: 1024px) {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: repeat(6, 1fr);
   }
 `;
 
@@ -128,6 +135,7 @@ const GridItem = styled.div`
 
 const GridImage = styled.img`
   width: 100%;
+  height: 200px;
   object-fit: cover;
   border-radius: 24px;
 `;
@@ -199,12 +207,13 @@ const NewPlaceForm = () => {
     console.log(data);
 
     // send files to backend to upload
-    const { data: fileName } = await axios.post("/upload", data, {
+    // returns array of paths - to images
+    const { data: fileNames } = await axios.post("/upload", data, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
     // add photos to state
-    setAddedPhotos((prev) => [...prev, fileName]);
+    setAddedPhotos((prev) => [...prev, ...fileNames]);
   };
 
   console.log("addedPhotos");
