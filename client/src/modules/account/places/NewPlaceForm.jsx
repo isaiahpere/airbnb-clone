@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components/macro";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 
-import Perks from "./Perks";
+import Perks from "./PerksForm";
 import axios from "axios";
+import PhotosForm from "./PhotosForm";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -48,98 +49,6 @@ const CheckinSubtitle = styled.h3`
   padding-left: 10px;
 `;
 
-const LinkUploadContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 14px;
-`;
-
-const LinkUploadButton = styled.button`
-  width: 100px;
-  border: none;
-  background-color: #b7b7b7;
-  height: 30px;
-  border-radius: 24px;
-  height: 40px;
-  color: #242424;
-  cursor: pointer;
-`;
-
-const PhotosContainer = styled.div``;
-
-const UploadBox = styled.label`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  border: solid 1px #dddddd;
-  background-color: transparent;
-  width: 160px;
-  height: 60px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.5s ease;
-  overflow: hidden;
-
-  &:hover {
-    background-color: #dddddd;
-  }
-`;
-
-const BoxContentContainer = styled.div`
-  display: flex;
-  align-items: center;
-  padding-bottom: 20px;
-`;
-
-const FileUploaderInput = styled.input`
-  visibility: hidden;
-`;
-
-const UploadIcon = styled(AiOutlineCloudUpload)`
-  font-size: 18px;
-  color: #242424;
-`;
-
-const UploadText = styled.div`
-  font-size: 16px;
-  color: #242424;
-`;
-
-const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  margin-top: 24px;
-
-  @media (min-width: 520px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  @media (min-width: 1440px) {
-    grid-template-columns: repeat(6, 1fr);
-  }
-`;
-
-const GridItem = styled.div`
-  width: 100%;
-`;
-
-const GridImage = styled.img`
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 24px;
-`;
-
 const ButtonContainer = styled.div`
   width: 100%;
   display: flex;
@@ -177,9 +86,9 @@ const NewPlaceForm = () => {
   const [photoLink, setPhotoLink] = useState("");
   const [addedPhotos, setAddedPhotos] = useState([]);
 
+  // handle photo upload by link
   const addPhotoByLink = async (e) => {
     e.preventDefault();
-    console.log("ready to add photo link");
     if (photoLink) {
       const { data: fileName } = await axios.post("/link-uploads", {
         link: photoLink,
@@ -190,6 +99,7 @@ const NewPlaceForm = () => {
     setPhotoLink("");
   };
 
+  // handle BULK photo upload
   const handlePhotoUpload = async (e) => {
     e.preventDefault();
     // get files
@@ -200,11 +110,7 @@ const NewPlaceForm = () => {
 
     for (let i = 0; i < files.length; i++) {
       data.append("photos", files[i]);
-      console.log(files[i]);
     }
-
-    console.log("data");
-    console.log(data);
 
     // send files to backend to upload
     // returns array of paths - to images
@@ -216,8 +122,6 @@ const NewPlaceForm = () => {
     setAddedPhotos((prev) => [...prev, ...fileNames]);
   };
 
-  console.log("addedPhotos");
-  console.log(addedPhotos);
   return (
     <Container>
       <Form>
@@ -288,43 +192,13 @@ const NewPlaceForm = () => {
             </CheckinItem>
           </CheckinGrid>
         </InputContainer>
-        <InputContainer>
-          <Label>Photos</Label>
-          <LinkUploadContainer>
-            <Input
-              type="text"
-              placeholder="Add using link"
-              value={photoLink}
-              onChange={(e) => setPhotoLink(e.target.value)}
-            />
-            <LinkUploadButton onClick={addPhotoByLink}>
-              Add Photo
-            </LinkUploadButton>
-          </LinkUploadContainer>
-          <PhotosContainer>
-            <UploadBox>
-              <FileUploaderInput
-                type="file"
-                multiple
-                onChange={handlePhotoUpload}
-              />
-              <BoxContentContainer>
-                <UploadIcon />
-                <UploadText>Upload</UploadText>
-              </BoxContentContainer>
-            </UploadBox>
-            <GridContainer>
-              {addedPhotos.length > 0 &&
-                addedPhotos.map((item) => (
-                  <GridItem>
-                    <GridImage
-                      src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${item}`}
-                    />
-                  </GridItem>
-                ))}
-            </GridContainer>
-          </PhotosContainer>
-        </InputContainer>
+        <PhotosForm
+          photoUrl={photoLink}
+          setPhotoUrl={setPhotoLink}
+          addPhotoUrl={addPhotoByLink}
+          bulkPhotoHandler={handlePhotoUpload}
+          selectedBulkPhotos={addedPhotos}
+        />
         <ButtonContainer>
           <SubmitButton>Save</SubmitButton>
         </ButtonContainer>

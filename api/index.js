@@ -152,7 +152,6 @@ app.post("/upload", multerUploads.array("photos", 12), (req, res) => {
     // get extension, re-write file with extension & push to array
     const { path, filename, originalname } = file;
     const fileExtension = originalname.split(".").slice(-1)[0];
-    // const fileExtension = originalNameParts[fileNameParts.length - 1];
     const newFilename = `${filename}.${fileExtension}`;
     fs.renameSync(path, `${path}.${fileExtension}`);
     uploadedFiles.push(newFilename);
