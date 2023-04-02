@@ -5,8 +5,8 @@ import axios from "axios";
 
 import UserContext from "../../utilities/context/userContext";
 import AccountNav from "../../modules/account";
-import Profile from "../../modules/account/Profile";
 import Loader from "../../components/globals/Loader";
+import Profile from "../../modules/account/Profile";
 import Bookings from "../../modules/account/Bookings";
 import Places from "../../modules/account/places";
 
@@ -30,7 +30,9 @@ const Account = () => {
     } else setPageName("profile");
   }, [subpage]);
 
-  // remove cookie and set redirect
+  /**
+   * Hanlde logout and redirect user
+   */
   const handleLogout = async () => {
     const res = await axios.post("/logout");
     console.log(res.data.redirect);
@@ -40,13 +42,11 @@ const Account = () => {
     }
   };
 
-  // redirect if logout
+  // redirect set to true upon logout
   if (redirect) return <Navigate to={redirect} />;
 
-  // redirect if not authenticated
-  if (!loading && !user) {
-    return <Navigate to="/login" />;
-  }
+  // if user not found return null
+  if (!user) return;
   return (
     <Fragment>
       {loading && <Loader center />}

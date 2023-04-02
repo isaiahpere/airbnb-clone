@@ -99,8 +99,8 @@ const GridImage = styled.img`
 const PhotosForm = ({
   photoUrl,
   setPhotoUrl,
-  addPhotoUrl,
-  bulkPhotoHandler,
+  handleAddPhotoUrl,
+  handleBulkPhotoHandler,
   selectedBulkPhotos,
 }) => {
   // handle photo url upload
@@ -110,7 +110,7 @@ const PhotosForm = ({
 
   // handle bulk photo upload
   const handleBulkPhtos = (e) => {
-    bulkPhotoHandler(e);
+    handleBulkPhotoHandler(e);
   };
   return (
     <InputContainer>
@@ -122,7 +122,9 @@ const PhotosForm = ({
           value={photoUrl}
           onChange={handlePhotUrl}
         />
-        <LinkUploadButton onClick={addPhotoUrl}>Add Photo</LinkUploadButton>
+        <LinkUploadButton onClick={handleAddPhotoUrl}>
+          Add Photo
+        </LinkUploadButton>
       </LinkUploadContainer>
       <PhotosContainer>
         <UploadBox>

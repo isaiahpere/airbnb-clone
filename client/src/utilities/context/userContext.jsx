@@ -9,7 +9,7 @@ export const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // attempt to find user on first load
+  // attempt to find user on first load using cookie if exist
   useEffect(() => {
     setLoading(true);
     if (!user) {

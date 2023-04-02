@@ -66,25 +66,29 @@ const Login = () => {
   // context
   const { user, setUser } = useContext(UserContext);
 
-  // check if user is authenticated
+  // userContext attempts to auth user by token.
   useEffect(() => {
     if (user) setRedirect(true);
   }, [user]);
 
-  // attempt login and add user to userContext
+  /**
+   * handle login
+   * @param {*} e
+   */
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // make request to server
+    // send login request to server
     try {
       const user = await axios.post("/login", {
         email: inputEmail,
         password: inputPassword,
       });
 
-      // set user and redirect
-      if (user.data) {
-        setUser(user?.data);
+      // check if user is authenticated
+      if (user?.data?.user) {
+        console.log(user?.data?.user);
+        setUser(user?.data?.user);
         setRedirect(true);
       }
     } catch (error) {
@@ -97,7 +101,7 @@ const Login = () => {
     setInputPassword("");
   };
 
-  // redirect if logged in
+  // if user found redirect is set to true to send user homepage
   if (redirect) {
     return <Navigate to="/" replace={true} />;
   }

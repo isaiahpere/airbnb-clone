@@ -34,7 +34,6 @@ const UserName = styled.span`
 const NavRight = () => {
   // user context
   const { user } = useContext(UserContext);
-
   return (
     <LinkContainer to={!!user ? "/account" : "/login"}>
       <Hamburger />

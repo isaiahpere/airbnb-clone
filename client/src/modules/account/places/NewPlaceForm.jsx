@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components/macro";
-import { AiOutlineCloudUpload } from "react-icons/ai";
+import { Navigate } from "react-router-dom";
 
+import UserContext from "../../../utilities/context/userContext";
 import Perks from "./PerksForm";
 import axios from "axios";
 import PhotosForm from "./PhotosForm";
@@ -56,7 +57,7 @@ const ButtonContainer = styled.div`
   justify-content: center;
 `;
 
-const SubmitButton = styled.div`
+const SubmitButton = styled.button`
   font-size: 14px;
   height: 36px;
   width: 100%;
@@ -75,6 +76,10 @@ const SubmitButton = styled.div`
 `;
 
 const NewPlaceForm = () => {
+  // User Context
+  const { user } = useContext(UserContext); // used to send for owner in DB places
+
+  // state
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
@@ -85,10 +90,15 @@ const NewPlaceForm = () => {
   const [maxGuest, setMaxGuest] = useState(1);
   const [photoLink, setPhotoLink] = useState("");
   const [addedPhotos, setAddedPhotos] = useState([]);
+  const [redirect, setRedirect] = useState("");
 
-  // handle photo upload by link
-  const addPhotoByLink = async (e) => {
+  /**
+   * handle uploading photo by link (one at time)
+   * @param {*} e
+   */
+  const handleLinkPhotoUpload = async (e) => {
     e.preventDefault();
+
     if (photoLink) {
       const { data: fileName } = await axios.post("/link-uploads", {
         link: photoLink,
@@ -99,18 +109,24 @@ const NewPlaceForm = () => {
     setPhotoLink("");
   };
 
-  // handle BULK photo upload
-  const handlePhotoUpload = async (e) => {
+  /**
+   * handle bulk photo upload (array)
+   * @param {*} e
+   */
+  const handleBulkPhotoUpload = async (e) => {
     e.preventDefault();
     // get files
     let files = e.target.files;
 
-    // form multipart data
+    // create form multipart data
     const data = new FormData();
 
-    for (let i = 0; i < files.length; i++) {
-      data.append("photos", files[i]);
-    }
+    const dataArray = Array.from(files);
+    dataArray.forEach((item) => {
+      data.append("photos", item);
+    });
+    console.log("dataArray");
+    console.log(dataArray);
 
     // send files to backend to upload
     // returns array of paths - to images
@@ -122,9 +138,40 @@ const NewPlaceForm = () => {
     setAddedPhotos((prev) => [...prev, ...fileNames]);
   };
 
+  /**
+   * handle form submission
+   * @param {*} e form submit event
+   */
+  const handleNewPlace = async (e) => {
+    e.preventDefault();
+
+    if (!user) {
+      return setRedirect("/login");
+    }
+
+    // send server request to add new place
+    const { data } = await axios.post("/places", {
+      user: user.id,
+      title,
+      address,
+      description,
+      perks,
+      additionalInfo,
+      checkin,
+      checkout,
+      maxGuest,
+      addedPhotos,
+    });
+
+    // redirect to places
+    if (data) setRedirect("/account/places");
+  };
+
+  if (redirect) return <Navigate to={redirect} />;
+
   return (
     <Container>
-      <Form>
+      <Form onSubmit={handleNewPlace}>
         <InputContainer>
           <Label>Title</Label>
           <Input
@@ -195,12 +242,12 @@ const NewPlaceForm = () => {
         <PhotosForm
           photoUrl={photoLink}
           setPhotoUrl={setPhotoLink}
-          addPhotoUrl={addPhotoByLink}
-          bulkPhotoHandler={handlePhotoUpload}
+          handleAddPhotoUrl={handleLinkPhotoUpload}
+          handleBulkPhotoHandler={handleBulkPhotoUpload}
           selectedBulkPhotos={addedPhotos}
         />
         <ButtonContainer>
-          <SubmitButton>Save</SubmitButton>
+          <SubmitButton type="submit">Save</SubmitButton>
         </ButtonContainer>
       </Form>
     </Container>
