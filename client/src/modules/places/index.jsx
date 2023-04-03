@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components/macro";
 
-import AccountModule from "../../modules/account";
+import AddButton from "./AddButton";
 
 const Section = styled.div``;
 
-const Account = () => {
+const PlacesModule = () => {
   return (
     <Section>
-      <AccountModule />
+      <AddButton />
     </Section>
   );
 };
 
-export default Account;
+export default PlacesModule;

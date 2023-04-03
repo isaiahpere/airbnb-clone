@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components/macro";
 import { Navigate } from "react-router-dom";
-
-import UserContext from "../../../utilities/context/userContext";
-import Perks from "./PerksForm";
 import axios from "axios";
-import PhotosForm from "./PhotosForm";
+
+import UserContext from "../../utilities/context/userContext";
+import PerksForms from "./PerksForms";
+import PhotosForms from "./PhotosForms";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -75,7 +75,7 @@ const SubmitButton = styled.button`
   }
 `;
 
-const NewPlaceForm = () => {
+const NewPlaceFormModule = () => {
   // User Context
   const { user } = useContext(UserContext); // used to send for owner in DB places
 
@@ -198,7 +198,7 @@ const NewPlaceForm = () => {
             onChange={(e) => setDescription(e.target.value)}
           />
         </InputContainer>
-        <Perks setPerk={setPerks} selectedPerks={perks} />
+        <PerksForms setPerk={setPerks} selectedPerks={perks} />
         <InputContainer>
           <Label>Additional Info</Label>
           <TextArea
@@ -213,8 +213,8 @@ const NewPlaceForm = () => {
             <CheckinItem>
               <CheckinSubtitle>Check-in Time</CheckinSubtitle>
               <Input
-                type="text"
-                placeholder="14:00"
+                type="number"
+                placeholder="11"
                 value={checkin}
                 onChange={(e) => setCheckin(e.target.value)}
               />
@@ -222,8 +222,8 @@ const NewPlaceForm = () => {
             <CheckinItem>
               <CheckinSubtitle>Check-Out Time</CheckinSubtitle>
               <Input
-                type="text"
-                placeholder="11:00"
+                type="number"
+                placeholder="15"
                 value={checkout}
                 onChange={(e) => setCheckout(e.target.value)}
               />
@@ -239,7 +239,7 @@ const NewPlaceForm = () => {
             </CheckinItem>
           </CheckinGrid>
         </InputContainer>
-        <PhotosForm
+        <PhotosForms
           photoUrl={photoLink}
           setPhotoUrl={setPhotoLink}
           handleAddPhotoUrl={handleLinkPhotoUpload}
@@ -254,4 +254,4 @@ const NewPlaceForm = () => {
   );
 };
 
-export default NewPlaceForm;
+export default NewPlaceFormModule;

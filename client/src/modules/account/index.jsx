@@ -1,48 +1,77 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Navigate } from "react-router-dom";
 import styled from "styled-components/macro";
+import axios from "axios";
 
-const NavTabs = [
-  { path: "/account/?", title: "My Profile", tabName: "profile" },
-  { path: "/account/bookings", title: "My Bookings", tabName: "bookings" },
-  { path: "/account/places", title: "My Places", tabName: "places" },
-];
+import UserContext from "../../utilities/context/userContext";
+import Loader from "../../components/globals/Loader";
+import Button from "../../components/globals/Button";
 
-const LinksContainer = styled.div`
+const Section = styled.div``;
+
+const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 30px;
+  flex-direction: column;
 `;
 
-const LinkContainer = styled.div`
-  padding: 4px 12px;
-  border-radius: 24px;
-  ${(props) => props.isActive && `background-color: #f3eeee;`}
+const Info = styled.div`
+  margin-bottom: 10px;
 `;
 
-const LinkItem = styled(Link)`
-  font-size: 14px;
+const EmailText = styled.span`
+  color: #646161;
+`;
+
+const NameText = styled.span`
+  font-weight: 600;
+`;
+
+const ButtonContainer = styled.div`
+  width: 300px;
 `;
 
 /**
  *
  * @param {Text} activePage the current active account section (ie. profile or bookings)
  */
-const AccountNav = ({ activePage }) => {
+const AccountModule = () => {
+  // user context
+  const { user, loading, setUser } = useContext(UserContext);
+
+  // state
+  const [redirect, setRedirect] = useState("");
+
+  const handleLogout = async () => {
+    const res = await axios.post("/logout");
+    console.log(res.data.redirect);
+    if (res?.data?.redirect) {
+      setUser(null);
+      setRedirect("/");
+    }
+  };
+
+  if (redirect) return <Navigate to={redirect} />;
+
   return (
-    <LinksContainer>
-      {NavTabs.map((item) => (
-        <LinkContainer
-          key={item.tabName}
-          isActive={activePage === item.tabName}
-        >
-          <LinkItem to={item.path}>{item.title}</LinkItem>
-        </LinkContainer>
-      ))}
-    </LinksContainer>
+    <Section>
+      {loading && <Loader center />}
+      {!loading && user && (
+        <Container>
+          <Info>
+            Logged in as <NameText>{user.name}</NameText>
+            <EmailText>{` - ${user.email}`}</EmailText>
+          </Info>
+          <ButtonContainer onClick={handleLogout}>
+            <Button fullWidth radius="24px" padding="10px 0px">
+              Logout
+            </Button>
+          </ButtonContainer>
+        </Container>
+      )}
+    </Section>
   );
 };
 
-export default AccountNav;
+export default AccountModule;

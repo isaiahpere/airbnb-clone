@@ -8,7 +8,7 @@ import {
 import { MdOutlinePets, MdRadio } from "react-icons/md";
 import { TbToolsKitchen2 } from "react-icons/tb";
 
-import { InputContainer, Label, Input } from "./NewPlaceForm";
+import { InputContainer, Label, Input } from ".";
 
 const PERKS = ["Wifi", "Parking", "Kitchen", "Pets", "Security", "Radio"];
 
@@ -44,7 +44,7 @@ const Kitchen = styled(TbToolsKitchen2)``;
 
 const PerkTitle = styled.span``;
 
-const Perks = ({ selectedPerks, setPerk }) => {
+const PerksForms = ({ selectedPerks, setPerk }) => {
   const PerkIcons = {
     Wifi: <Wifi />,
     Parking: <Parking />,
@@ -97,4 +97,4 @@ const Perks = ({ selectedPerks, setPerk }) => {
   );
 };
 
-export default Perks;
+export default PerksForms;

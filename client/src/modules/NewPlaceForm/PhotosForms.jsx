@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/macro";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 
-import { Label, InputContainer, Input } from "./NewPlaceForm";
+import { Label, InputContainer, Input } from ".";
 
 const LinkUploadContainer = styled.div`
   display: flex;
@@ -96,7 +96,7 @@ const GridImage = styled.img`
   border-radius: 24px;
 `;
 
-const PhotosForm = ({
+const PhotosForms = ({
   photoUrl,
   setPhotoUrl,
   handleAddPhotoUrl,
@@ -149,4 +149,4 @@ const PhotosForm = ({
   );
 };
 
-export default PhotosForm;
+export default PhotosForms;

@@ -190,19 +190,38 @@ app.post("/upload", multerUploads.array("photos", 12), (req, res) => {
   res.json(uploadedFiles);
 });
 
-app.post("/places", (req, res) => {
-  // owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  // title: String,
-  // address: String,
-  // photos: [String],
-  // description: String,
-  // perks: [String],
-  // extraInfo: String,
-  // checkIn: Number,
-  // checkout: Number,
-  // maxGuest: Number,
-  const { user } = req.body;
-  res.json(`the user is ${user}`);
+/**
+ * Handle creating new user in DB.
+ */
+app.post("/places", async (req, res) => {
+  const {
+    user,
+    title,
+    address,
+    description,
+    perks,
+    additionalInfo,
+    checkin,
+    checkout,
+    maxGuest,
+    addedPhotos,
+  } = req.body;
+
+  // create user in db
+  const createdPlace = await Place.create({
+    owner: user,
+    title,
+    address,
+    description,
+    perks,
+    additionalInfo,
+    checkin,
+    checkout,
+    maxGuest,
+    photos: addedPhotos,
+  });
+
+  res.json(createdPlace);
 });
 
 /**
