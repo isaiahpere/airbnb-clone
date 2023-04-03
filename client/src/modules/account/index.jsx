@@ -45,7 +45,6 @@ const AccountModule = () => {
 
   const handleLogout = async () => {
     const res = await axios.post("/logout");
-    console.log(res.data.redirect);
     if (res?.data?.redirect) {
       setUser(null);
       setRedirect("/");

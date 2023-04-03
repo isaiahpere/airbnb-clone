@@ -74,11 +74,6 @@ const Register = () => {
   // handle form submission
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("submitted");
-
-    console.log(`name: ${inputName}`);
-    console.log(`email: ${inputEmail}`);
-    console.log(`pass: ${inputPassword}`);
 
     // register request
     try {
@@ -87,8 +82,8 @@ const Register = () => {
         email: inputEmail,
         password: inputPassword,
       });
+      console.log(res);
       alert("registration successful - Welcome");
-      console.log(res?.data);
     } catch (error) {
       console.log(error);
       alert("registration failed - try again");

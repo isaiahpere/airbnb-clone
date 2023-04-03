@@ -150,7 +150,7 @@ app.post("/register", async (req, res) => {
  * POST - handle user logout cleans up token
  */
 app.post("/logout", (req, res) => {
-  res.cookie("token", "").json({ redirect: true });
+  res.clearCookie("token").json({ redirect: true });
 });
 
 /**
@@ -188,6 +188,18 @@ app.post("/upload", multerUploads.array("photos", 12), (req, res) => {
   });
 
   res.json(uploadedFiles);
+});
+
+app.get(`/places/:userId`, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    console.log(req.params);
+    const places = await Place.find({ owner: userId });
+    if (!places) throw new Errro("No Places found");
+    res.json(places);
+  } catch (error) {
+    res.status(422).json(error.message ? error.message : error);
+  }
 });
 
 /**

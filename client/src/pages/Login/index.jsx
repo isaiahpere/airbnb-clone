@@ -87,7 +87,6 @@ const Login = () => {
 
       // check if user is authenticated
       if (user?.data?.user) {
-        console.log(user?.data?.user);
         setUser(user?.data?.user);
         setRedirect(true);
       }

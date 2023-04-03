@@ -125,8 +125,6 @@ const NewPlaceFormModule = () => {
     dataArray.forEach((item) => {
       data.append("photos", item);
     });
-    console.log("dataArray");
-    console.log(dataArray);
 
     // send files to backend to upload
     // returns array of paths - to images
