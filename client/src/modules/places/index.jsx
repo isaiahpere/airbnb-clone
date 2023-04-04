@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import AddButton from "./AddButton";
 import axios from "axios";
 import { Flex } from "../../pages/Home";
-import home from "../../assets/home.jpg";
 
 const Section = styled.div``;
 
@@ -92,8 +91,9 @@ const PlacesModule = () => {
             <PlaceCard key={place._id} to={`/account/places/${place._id}`}>
               {place.photos.length > 0 && (
                 <PlaceImageContainer>
-                  {/* <PlaceImage src={place.photos[0]} /> */}
-                  <PlaceImage src={home} alt="" />
+                  <PlaceImage
+                    src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${place.photos[0]}`}
+                  />
                 </PlaceImageContainer>
               )}
               <PlaceInfoConatiner>

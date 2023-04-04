@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { AiOutlineCloudUpload } from "react-icons/ai";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 import { Label, InputContainer, Input } from ".";
 
@@ -86,6 +87,7 @@ const GridContainer = styled.div`
 `;
 
 const GridItem = styled.div`
+  position: relative;
   width: 100%;
 `;
 
@@ -94,6 +96,14 @@ const GridImage = styled.img`
   height: 200px;
   object-fit: cover;
   border-radius: 24px;
+`;
+
+const TrashCan = styled(FaRegTrashAlt)`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  color: red;
+  font-size: 18px;
 `;
 
 const PhotosForms = ({
@@ -141,6 +151,7 @@ const PhotosForms = ({
                 <GridImage
                   src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${item}`}
                 />
+                <TrashCan />
               </GridItem>
             ))}
         </GridContainer>
