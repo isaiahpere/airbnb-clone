@@ -29,7 +29,8 @@ const App = () => {
             <Route path="/account/bookings" element={<Bookings />} />
             <Route path="/account/places" element={<Places />} />
           </Route>
-          <Route path="/account/places/new-place" element={<PlaceFormPage />} />
+          <Route path="/account/places/new" element={<PlaceFormPage />} />
+          <Route path="/account/places/:id" element={<PlaceFormPage />} />
         </Route>
       </Routes>
     </UserContextProvider>

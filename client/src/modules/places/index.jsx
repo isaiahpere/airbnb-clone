@@ -75,7 +75,7 @@ const PlacesModule = () => {
   useEffect(() => {
     if (user) {
       const fetchPlaces = async () => {
-        const { data } = await axios.get(`/places/${user.id}`);
+        const { data } = await axios.get(`/places/byowner/${user.id}`);
         setPlaces(data);
       };
 
@@ -83,15 +83,13 @@ const PlacesModule = () => {
     }
   }, [user]);
 
-  console.log(places);
-
   return (
     <Section>
       <AddButton />
       <Container>
         {places &&
           places.map((place) => (
-            <PlaceCard key={place._id} to={`/account/place/${place._id}`}>
+            <PlaceCard key={place._id} to={`/account/places/${place._id}`}>
               {place.photos.length > 0 && (
                 <PlaceImageContainer>
                   {/* <PlaceImage src={place.photos[0]} /> */}

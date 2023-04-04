@@ -45,34 +45,33 @@ mongoose.connect(process.env.MONGOOSE_CONNECTION);
 //
 /*************** */
 
-// GET - DUMMY
-app.get("/login", (req, res) => {
-  res.send("hello from login");
-});
-
 /**
- * GET - attempt to auth user with JWT.
+ * POST - handle user registration
+ * creates user in DB, creates JWT and returns cookie with token
  */
-app.get("/profile", async (req, res) => {
+app.post("/register", async (req, res) => {
+  // destruct body
+  const { name, email, password } = req.body;
+
+  // check email is not used before creating a new one.
   try {
-    // check token exist
-    const { token } = req.cookies;
-    if (!token) throw new Error("no jwt token provided");
+    // if user exist throw error
+    const foundUser = await User.findOne({ email });
+    console.log(foundUser);
+    if (foundUser) throw Error("email already in use");
 
-    // verify token
-    const verifiedToken = jwt.verify(token, jwtSecret, {});
-    const { id } = verifiedToken;
+    // create user in database
+    const user = await User.create({
+      name,
+      email,
+      password: bcrypt.hashSync(password, bcryptSalt),
+    });
 
-    // find user by id
-    const user = await User.findById(id);
-
-    // if user found return user info, else throw error
-    if (user) {
-      return res.json({ name: user.name, email: user.email, id: user._id });
-    }
-    throw new Error("user not found!");
+    // response with user collection created
+    res.json(user);
   } catch (error) {
-    res.status(224).json(error.message);
+    console.log(error);
+    res.status(422).json(error);
   }
 });
 
@@ -113,36 +112,6 @@ app.post("/login", async (req, res) => {
   } else {
     // if no user then respons with no user found
     res.status(422).json({ error: "user not found" });
-  }
-});
-
-/**
- * POST - handle user registration
- * creates user in DB, creates JWT and returns cookie with token
- */
-app.post("/register", async (req, res) => {
-  // destruct body
-  const { name, email, password } = req.body;
-
-  // check email is not used before creating a new one.
-  try {
-    // if user exist throw error
-    const foundUser = await User.findOne({ email });
-    console.log(foundUser);
-    if (foundUser) throw Error("email already in use");
-
-    // create user in database
-    const user = await User.create({
-      name,
-      email,
-      password: bcrypt.hashSync(password, bcryptSalt),
-    });
-
-    // response with user collection created
-    res.json(user);
-  } catch (error) {
-    console.log(error);
-    res.status(422).json(error);
   }
 });
 
@@ -190,26 +159,46 @@ app.post("/upload", multerUploads.array("photos", 12), (req, res) => {
   res.json(uploadedFiles);
 });
 
-app.get(`/places/:userId`, async (req, res) => {
+/**
+ * GET - attempt to auth user with JWT.
+ */
+app.get("/profile", async (req, res) => {
   try {
-    const { userId } = req.params;
-    console.log(req.params);
-    const places = await Place.find({ owner: userId });
-    if (!places) throw new Errro("No Places found");
-    res.json(places);
+    // check token exist
+    const { token } = req.cookies;
+    if (!token) throw new Error("no jwt token provided");
+
+    // verify token
+    const verifiedToken = jwt.verify(token, jwtSecret, {});
+    const { id } = verifiedToken;
+
+    // find user by id
+    const user = await User.findById(id);
+
+    // if user found return user info, else throw error
+    if (user) {
+      return res.json({ name: user.name, email: user.email, id: user._id });
+    }
+    throw new Error("user not found!");
   } catch (error) {
-    res.status(422).json(error.message ? error.message : error);
+    res.status(224).json(error.message);
   }
 });
+
+//*************************** */
+// PLACES ROUTES
+//*************************** */
 
 /**
  * Handle creating new user in DB.
  */
 app.post("/places", async (req, res) => {
   const {
-    user,
+    ownerId,
     title,
     address,
+    city,
+    state,
     description,
     perks,
     additionalInfo,
@@ -221,9 +210,11 @@ app.post("/places", async (req, res) => {
 
   // create user in db
   const createdPlace = await Place.create({
-    owner: user,
+    owner: ownerId,
     title,
     address,
+    city,
+    state,
     description,
     perks,
     additionalInfo,
@@ -237,9 +228,84 @@ app.post("/places", async (req, res) => {
 });
 
 /**
- *  LEFT HER:
- * I'm in the process of building this end point that accepts the form values.
- * I have to create the logic that will create a new place in the DB.
+ * GET - Handle getting a single place
+ */
+app.get("/places/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    // find the place
+    const placeDetails = await Place.findById(id);
+    // if (!placeDetails) throw new Error("no places found!");
+    res.json(placeDetails);
+  } catch (error) {
+    res.status(422).json(error.message ? error.message : error);
+  }
+});
+
+/**
+ * GET - Gets all the places for a single owner by owner id
+ */
+app.get(`/places/byowner/:userId`, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const places = await Place.find({ owner: userId });
+    if (!places) throw new Errro("No Places found");
+    res.json(places);
+  } catch (error) {
+    res.status(422).json(error.message ? error.message : error);
+  }
+});
+
+/**
+ * PUT - update one place
+ */
+app.put("/places", async (req, res) => {
+  const {
+    placeId,
+    ownerId,
+    title,
+    address,
+    city,
+    state,
+    description,
+    perks,
+    additionalInfo,
+    checkin,
+    checkout,
+    maxGuest,
+    addedPhotos,
+  } = req.body;
+
+  // find the place so we can compare the owner to the
+  // owner requesting the PUT request
+  const foundPlace = await Place.findById(placeId);
+
+  // update only if owner owns the place that needs to be updated
+  if (foundPlace.owner.toString() === ownerId) {
+    const updatedPlace = await Place.updateOne(
+      { _id: placeId },
+      {
+        title,
+        address,
+        city,
+        state,
+        description,
+        perks,
+        additionalInfo,
+        checkin,
+        checkout,
+        maxGuest,
+        photos: addedPhotos,
+      }
+    );
+    res.json(updatedPlace);
+  } else {
+    res.status(422).json("could not update place");
+  }
+});
+
+/**
+ * Express Listener
  */
 app.listen(PORT, () => {
   console.log(`Server Connection Established on port ${PORT}`);

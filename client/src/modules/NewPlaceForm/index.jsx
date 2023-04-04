@@ -1,6 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components/macro";
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 import UserContext from "../../utilities/context/userContext";
@@ -79,9 +79,14 @@ const NewPlaceFormModule = () => {
   // User Context
   const { user } = useContext(UserContext); // used to send for owner in DB places
 
+  // get place id from params
+  const { id } = useParams(); // if id found, place is not new
+
   // state
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
   const [description, setDescription] = useState("");
   const [perks, setPerks] = useState([]);
   const [additionalInfo, setAdditionalInfo] = useState("");
@@ -91,6 +96,30 @@ const NewPlaceFormModule = () => {
   const [photoLink, setPhotoLink] = useState("");
   const [addedPhotos, setAddedPhotos] = useState([]);
   const [redirect, setRedirect] = useState("");
+
+  // check if id exist - if it does then grab the data for the place
+  // if not then the form is create new place
+  useEffect(() => {
+    if (!id) return;
+    const getPlace = async () => {
+      const placeInfo = await axios.get(`/places/${id}`);
+      if (placeInfo) {
+        console.log(placeInfo);
+        setTitle(placeInfo.data?.title);
+        setAddress(placeInfo.data?.address);
+        setCity(placeInfo.data?.city);
+        setState(placeInfo.data?.state);
+        setDescription(placeInfo.data?.description);
+        setPerks(placeInfo.data?.perks);
+        setAdditionalInfo(placeInfo.data?.additionalInfo);
+        setCheckin(placeInfo.data?.checkin);
+        setCheckout(placeInfo.data?.checkout);
+        setMaxGuest(placeInfo.data?.maxGuest);
+        setAddedPhotos(placeInfo.data?.photos);
+      }
+    };
+    getPlace();
+  }, [id]);
 
   /**
    * handle uploading photo by link (one at time)
@@ -140,18 +169,21 @@ const NewPlaceFormModule = () => {
    * handle form submission
    * @param {*} e form submit event
    */
-  const handleNewPlace = async (e) => {
+  const handleSavePlace = async (e) => {
     e.preventDefault();
 
+    // no user === send to login
     if (!user) {
       return setRedirect("/login");
     }
 
-    // send server request to add new place
-    const { data } = await axios.post("/places", {
-      user: user.id,
+    // create object for place data
+    const placeData = {
+      ownerId: user.id,
       title,
       address,
+      city,
+      state,
       description,
       perks,
       additionalInfo,
@@ -159,17 +191,30 @@ const NewPlaceFormModule = () => {
       checkout,
       maxGuest,
       addedPhotos,
-    });
+    };
+
+    // id === place needs to be updated
+    if (id) {
+      const updatedPlace = await axios.put("/places", {
+        placeId: id,
+        ...placeData,
+      });
+      console.log(updatedPlace);
+    } else {
+      // !id === place needs to be created
+      const { data } = await axios.post("/places", placeData);
+      console.log(data);
+    }
 
     // redirect to places
-    if (data) setRedirect("/account/places");
+    setRedirect("/account/places");
   };
 
   if (redirect) return <Navigate to={redirect} />;
 
   return (
     <Container>
-      <Form onSubmit={handleNewPlace}>
+      <Form onSubmit={handleSavePlace}>
         <InputContainer>
           <Label>Title</Label>
           <Input
@@ -186,6 +231,24 @@ const NewPlaceFormModule = () => {
             placeholder="Address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
+          />
+        </InputContainer>
+        <InputContainer>
+          <Label>City</Label>
+          <Input
+            type="text"
+            placeholder="Los Angeles"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+          />
+        </InputContainer>
+        <InputContainer>
+          <Label>State</Label>
+          <Input
+            type="text"
+            placeholder="State"
+            value={state}
+            onChange={(e) => setState(e.target.value)}
           />
         </InputContainer>
         <InputContainer>

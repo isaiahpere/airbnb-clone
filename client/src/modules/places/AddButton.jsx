@@ -34,7 +34,7 @@ const AddButton = () => {
     <ButtonContainer>
       <LinkContainer>
         <PlusIcon />
-        <AddLink to="/account/places/new-place">Add New Place</AddLink>
+        <AddLink to="/account/places/new">Add New Place</AddLink>
       </LinkContainer>
     </ButtonContainer>
   );
