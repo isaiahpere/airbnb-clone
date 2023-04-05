@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import NavLeft from "./NavLeft";
-import NavMiddle from "./NavMiddle";
+// import NavMiddle from "./NavMiddle";
 import NavRight from "./NavRight";
 
 const Nav = styled.header`
@@ -17,7 +17,7 @@ const Navbar = () => {
   return (
     <Nav>
       <NavLeft />
-      <NavMiddle />
+      {/* <NavMiddle /> */}
       <NavRight />
     </Nav>
   );

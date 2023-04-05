@@ -4,6 +4,7 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
 
 import { Label, InputContainer, Input } from ".";
+import { Flex } from "../home";
 
 const LinkUploadContainer = styled.div`
   display: flex;
@@ -98,12 +99,57 @@ const GridImage = styled.img`
   border-radius: 24px;
 `;
 
-const TrashCan = styled(FaRegTrashAlt)`
+const TrashContainer = styled(Flex)`
   position: absolute;
-  bottom: 10px;
+  bottom: 15px;
   right: 10px;
-  color: red;
-  font-size: 18px;
+  padding: 6px;
+  border-radius: 24px;
+  z-index: 100000;
+  background-color: rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+`;
+
+const TrashCan = styled(FaRegTrashAlt)`
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  &:hover {
+    color: #989696;
+  }
+`;
+const PrimaryPhotoContainer = styled(Flex)`
+  position: absolute;
+  /* visibility: hidden; */
+  background-color: transparent;
+  ${(props) =>
+    props.primary &&
+    `
+    background-color: rgba(255, 56, 91, 0.8);
+  `}
+  top: 15px;
+  left: 10px;
+  padding: 2px 4px;
+  border-radius: 24px;
+  z-index: 100000;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(255, 56, 91, 0.8);
+  }
+`;
+
+const PrimaryPhoto = styled.div`
+  color: transparent;
+  ${(props) =>
+    props.primary &&
+    `
+    color: #fff;
+  `}
+  font-size: 10px;
+  cursor: pointer;
+  &:hover {
+    color: #fff;
+  }
 `;
 
 const PhotosForms = ({
@@ -111,8 +157,11 @@ const PhotosForms = ({
   setPhotoUrl,
   handleAddPhotoUrl,
   handleBulkPhotoHandler,
+  handleAddedPhotos,
   selectedBulkPhotos,
 }) => {
+  let primaryPhoto = selectedBulkPhotos[0];
+
   // handle photo url upload
   const handlePhotUrl = (e) => {
     setPhotoUrl(e.target.value);
@@ -121,6 +170,20 @@ const PhotosForms = ({
   // handle bulk photo upload
   const handleBulkPhtos = (e) => {
     handleBulkPhotoHandler(e);
+  };
+
+  // remove photo from addedPhotos
+  const handleRemovePhoto = (photo) => {
+    handleAddedPhotos((prev) => prev.filter((item) => item !== photo));
+  };
+
+  // moves the photo to the beginning of the addedPhotos to make it primary
+  const handlePrimaryPhotoChange = (photo) => {
+    console.log("changing primary");
+    handleAddedPhotos((prev) => [
+      photo,
+      ...prev.filter((item) => item !== photo),
+    ]);
   };
   return (
     <InputContainer>
@@ -151,7 +214,17 @@ const PhotosForms = ({
                 <GridImage
                   src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${item}`}
                 />
-                <TrashCan />
+                <TrashContainer>
+                  <TrashCan onClick={() => handleRemovePhoto(item)} />
+                </TrashContainer>
+                <PrimaryPhotoContainer
+                  primary={item === primaryPhoto}
+                  onClick={() => handlePrimaryPhotoChange(item)}
+                >
+                  <PrimaryPhoto primary={item === primaryPhoto}>
+                    Primary
+                  </PrimaryPhoto>
+                </PrimaryPhotoContainer>
               </GridItem>
             ))}
         </GridContainer>

@@ -87,11 +87,12 @@ const NewPlaceFormModule = () => {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+  const [pricePerNight, setPricePerNight] = useState("");
   const [description, setDescription] = useState("");
   const [perks, setPerks] = useState([]);
   const [additionalInfo, setAdditionalInfo] = useState("");
-  const [checkin, setCheckin] = useState("");
-  const [checkout, setCheckout] = useState("");
+  const [checkin, setCheckin] = useState(0);
+  const [checkout, setCheckout] = useState(0);
   const [maxGuest, setMaxGuest] = useState(1);
   const [photoLink, setPhotoLink] = useState("");
   const [addedPhotos, setAddedPhotos] = useState([]);
@@ -109,11 +110,22 @@ const NewPlaceFormModule = () => {
         setAddress(placeInfo.data?.address);
         setCity(placeInfo.data?.city);
         setState(placeInfo.data?.state);
+        setPricePerNight(placeInfo.data?.pricePerNight.toFixed(2));
         setDescription(placeInfo.data?.description);
         setPerks(placeInfo.data?.perks);
         setAdditionalInfo(placeInfo.data?.additionalInfo);
-        setCheckin(placeInfo.data?.checkin);
-        setCheckout(placeInfo.data?.checkout);
+        setCheckin(
+          placeInfo.data?.checkin.toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+            useGrouping: false,
+          })
+        );
+        setCheckout(
+          placeInfo.data?.checkout.toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+            useGrouping: false,
+          })
+        );
         setMaxGuest(placeInfo.data?.maxGuest);
         setAddedPhotos(placeInfo.data?.photos);
       }
@@ -184,6 +196,7 @@ const NewPlaceFormModule = () => {
       address,
       city,
       state,
+      pricePerNight,
       description,
       perks,
       additionalInfo,
@@ -252,6 +265,15 @@ const NewPlaceFormModule = () => {
           />
         </InputContainer>
         <InputContainer>
+          <Label>Price Per Night ($)</Label>
+          <Input
+            type="number"
+            placeholder="$200.00"
+            value={pricePerNight}
+            onChange={(e) => setPricePerNight(e.target.value)}
+          />
+        </InputContainer>
+        <InputContainer>
           <Label>Description</Label>
           <TextArea
             rows={6}
@@ -304,6 +326,7 @@ const NewPlaceFormModule = () => {
           photoUrl={photoLink}
           setPhotoUrl={setPhotoLink}
           handleAddPhotoUrl={handleLinkPhotoUpload}
+          handleAddedPhotos={setAddedPhotos}
           handleBulkPhotoHandler={handleBulkPhotoUpload}
           selectedBulkPhotos={addedPhotos}
         />

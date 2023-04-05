@@ -1,18 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-export const Flex = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+import HomeModule from "../../modules/home";
 
 const Section = styled.section``;
 
 const Home = () => {
   return (
     <Section>
-      <div>Home Page</div>
+      <HomeModule />
     </Section>
   );
 };

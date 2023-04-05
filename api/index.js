@@ -199,6 +199,7 @@ app.post("/places", async (req, res) => {
     address,
     city,
     state,
+    pricePerNight,
     description,
     perks,
     additionalInfo,
@@ -215,6 +216,7 @@ app.post("/places", async (req, res) => {
     address,
     city,
     state,
+    pricePerNight,
     description,
     perks,
     additionalInfo,
@@ -225,6 +227,20 @@ app.post("/places", async (req, res) => {
   });
 
   res.json(createdPlace);
+});
+
+/**
+ * GET - get all places that exist
+ */
+app.get("/all-places", async (req, res) => {
+  try {
+    // find the place
+    const allPlaces = await Place.find({});
+    // if (!placeDetails) throw new Error("no places found!");
+    res.json(allPlaces);
+  } catch (error) {
+    res.status(422).json(error.message ? error.message : error);
+  }
 });
 
 /**
@@ -267,6 +283,7 @@ app.put("/places", async (req, res) => {
     address,
     city,
     state,
+    pricePerNight,
     description,
     perks,
     additionalInfo,
@@ -289,6 +306,7 @@ app.put("/places", async (req, res) => {
         address,
         city,
         state,
+        pricePerNight,
         description,
         perks,
         additionalInfo,

@@ -9,7 +9,13 @@ const Flex = styled.div`
   justify-content: center;
 `;
 
-const ButtonContainer = styled(Flex)``;
+const ButtonContainer = styled(Flex)`
+  ${(props) =>
+    props.spaceBottom &&
+    `
+  margin-bottom: ${props.spaceBottom}px;
+`}
+`;
 
 const LinkContainer = styled(Flex)`
   gap: 4px;
@@ -29,9 +35,9 @@ const AddLink = styled(Link)`
   color: white;
 `;
 
-const AddButton = () => {
+const AddButton = ({ spaceBottom }) => {
   return (
-    <ButtonContainer>
+    <ButtonContainer spaceBottom={spaceBottom}>
       <LinkContainer>
         <PlusIcon />
         <AddLink to="/account/places/new">Add New Place</AddLink>

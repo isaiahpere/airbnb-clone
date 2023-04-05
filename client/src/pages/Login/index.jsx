@@ -22,7 +22,10 @@ const Form = styled.form`
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 400px;
+  width: 100%;
+  @media (min-width: 768px) {
+    width: 400px;
+  }
 `;
 
 const FormInput = styled.input`

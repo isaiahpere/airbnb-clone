@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Flex } from "../../pages/Home";
+import { Flex } from "../home";
 
 const Section = styled(Flex)``;
 
