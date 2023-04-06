@@ -6,6 +6,7 @@ const Container = styled.hr`
   background-color: rgba(0, 0, 0, 0.1);
   width: 100%;
   height: 2px;
+  padding: 0px 10px;
 `;
 
 const HorizontalRule = () => {

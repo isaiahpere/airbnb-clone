@@ -4,13 +4,14 @@ import styled from "styled-components";
 import HorizontalRule from "../../../components/HorizontalRule";
 import PlaceInfoLeftHeader from "./PlaceInfoLeftHeader";
 import PlaceInfoLeftHighlights from "./PlaceInfoLeftHighlights";
+import PlaceInfoLeftAircover from "./PlaceInfoLeftAircover";
 
 const Section = styled.div`
   width: 60%;
 `;
 
-const AirCoverContainer = styled.div`
-  margin-top: 30px;
+const Temporary = styled.div`
+  margin-top: 200px;
 `;
 
 const PlaceInfoLeft = ({ place }) => {
@@ -19,7 +20,9 @@ const PlaceInfoLeft = ({ place }) => {
       <PlaceInfoLeftHeader />
       <HorizontalRule />
       <PlaceInfoLeftHighlights />
-      <AirCoverContainer></AirCoverContainer>
+      <HorizontalRule />
+      <PlaceInfoLeftAircover />
+      <Temporary />
     </Section>
   );
 };
