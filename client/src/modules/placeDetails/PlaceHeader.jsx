@@ -32,17 +32,17 @@ const ReviewContainer = styled(Flex)`
   justify-content: flex-start;
 `;
 
-const StartReview = styled(BsStarFill)`
+export const StartReview = styled(BsStarFill)`
   font-size: 16px;
 `;
 
-const StarText = styled.span`
+export const StarText = styled.span`
   font-size: 16px;
   padding-top: 2px;
   margin-left: 4px;
 `;
 
-const UnderlineText = styled.span`
+export const UnderlineText = styled.span`
   text-decoration: underline;
   text-underline-offset: 2px;
   font-size: 16px;
@@ -50,7 +50,7 @@ const UnderlineText = styled.span`
   cursor: pointer;
 `;
 
-const SuperHostIcon = styled(GiRibbonMedal)`
+export const SuperHostIcon = styled(GiRibbonMedal)`
   font-size: 16px;
   margin-right: 4px;
 `;
@@ -92,7 +92,13 @@ const PlaceHeader = ({ place }) => {
           <SuperHostIcon />
           <SuperHostText>Superhost</SuperHostText>
           <Dot />
-          <UnderlineText>{`${place.city}, ${place.state}`}</UnderlineText>
+          <UnderlineText>
+            <a
+              href={`https://www.google.com/maps/place/${place.city},+${place.state}`}
+              target="_blank"
+              rel="noreferrer"
+            >{`${place.city}, ${place.state}`}</a>
+          </UnderlineText>
         </ReviewContainer>
         <ShareLikeContainer>
           <ShareIcon />

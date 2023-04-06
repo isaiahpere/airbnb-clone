@@ -1,12 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-// import styled from "styled-components/macro";
 
 import PlaceHeader from "./PlaceHeader";
 import PlaceDetailsMaxContainer from "../../components/PlaceDetailsMaxContainer";
 import PhotosGrid from "./PhotosGrid";
 import AllPhotos from "./AllPhotos";
+import PlaceInfo from "./placeInfo";
 
 const PlaceDetailsModule = () => {
   // state
@@ -38,6 +38,7 @@ const PlaceDetailsModule = () => {
     <PlaceDetailsMaxContainer marginTopTablet={15} marginTop={30}>
       <PlaceHeader place={place} />
       <PhotosGrid place={place} onChangeAllPhotos={setShowPhotosModal} />
+      <PlaceInfo place={place} />
     </PlaceDetailsMaxContainer>
   );
 };
