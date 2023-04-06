@@ -12,6 +12,7 @@ import Account from "./pages/Account";
 import Bookings from "./pages/Bookings";
 import Places from "./pages/Places";
 import PlaceFormPage from "./pages/PlacesForm";
+import PlaceDetailsModule from "./modules/placeDetails";
 
 axios.defaults.baseURL = "http://localhost:4000";
 axios.defaults.withCredentials = true; // req & send cookies
@@ -31,6 +32,7 @@ const App = () => {
           </Route>
           <Route path="/account/places/new" element={<PlaceFormPage />} />
           <Route path="/account/places/:id" element={<PlaceFormPage />} />
+          <Route path="/place/:id" element={<PlaceDetailsModule />} />
         </Route>
       </Routes>
     </UserContextProvider>

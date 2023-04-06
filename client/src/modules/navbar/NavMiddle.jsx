@@ -5,7 +5,7 @@ import { BiSearch } from "react-icons/bi";
 import Button from "../../components/globals/Button";
 
 const Container = styled.div`
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   height: 42px;
@@ -13,6 +13,9 @@ const Container = styled.div`
   gap: 12px;
   border: solid 1px #dddddd;
   border-radius: 24px;
+  @media (min-width: 768px) {
+    display: flex;
+  }
 `;
 
 const Item = styled.div``;

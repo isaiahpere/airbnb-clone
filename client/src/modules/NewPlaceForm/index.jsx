@@ -103,7 +103,7 @@ const NewPlaceFormModule = () => {
   useEffect(() => {
     if (!id) return;
     const getPlace = async () => {
-      const placeInfo = await axios.get(`/places/${id}`);
+      const placeInfo = await axios.get(`/place/${id}`);
       if (placeInfo) {
         console.log(placeInfo);
         setTitle(placeInfo.data?.title);

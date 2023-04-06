@@ -246,7 +246,7 @@ app.get("/all-places", async (req, res) => {
 /**
  * GET - Handle getting a single place
  */
-app.get("/places/:id", async (req, res) => {
+app.get("/place/:id", async (req, res) => {
   try {
     const { id } = req.params;
     // find the place

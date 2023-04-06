@@ -13,17 +13,6 @@ export const Flex = styled.div`
 
 const Section = styled(Flex)`
   margin-top: 56px;
-  padding: 0px 10px;
-  gap: 30px;
-  @media (min-width: 550px) {
-    padding: 0px 20px;
-  }
-  @media (min-width: 1024px) {
-    padding: 0px 40px;
-  }
-  @media (min-width: 1440px) {
-    padding: 0px 80px;
-  }
 `;
 
 const HomeModule = () => {
@@ -43,7 +32,9 @@ const HomeModule = () => {
     <Section>
       <GridContainer>
         {allPlaces.length > 0 &&
-          allPlaces.map((place) => <PlaceCard key={place._id} place={place} />)}
+          allPlaces.map((place) => (
+            <PlaceCard key={place._id} place={place} toDetails />
+          ))}
       </GridContainer>
     </Section>
   );

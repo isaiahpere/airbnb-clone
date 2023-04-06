@@ -2,24 +2,24 @@ import React from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 
-import FlexContainer from "./FlexContainer";
+import { Flex } from "./FlexContainer";
 
 const Card = styled(Link)`
   width: 100%;
-  max-height: 386px;
   cursor: pointer;
 `;
 
-const CardImageContainer = styled(FlexContainer)`
-  width: 100%;
+const CardImageContainer = styled(Flex)`
+  justify-content: flex-start;
+  display: block;
   height: 286px;
+  background-color: red;
   border-radius: 24px;
-  margin-bottom: 10px;
   @media (min-width: 1130px) {
-    height: 280px;
+    height: 260px;
   }
-  @media (min-width: 1900px) {
-    height: 280px;
+  @media (min-width: 1200px) {
+    height: 300px;
   }
 `;
 
@@ -30,7 +30,12 @@ const CardImage = styled.img`
   border-radius: 24px;
 `;
 
-const CardInfoConatiner = styled.div``;
+const CardInfoContainer = styled.div`
+  margin-top: 4px;
+  @media (min-width: 768px) {
+    margin-top: 8px;
+  }
+`;
 
 const CardCityState = styled.p`
   font-size: 14px;
@@ -57,9 +62,13 @@ const CardText = styled.span`
   color: #616060;
 `;
 
-const PlaceCard = ({ place }) => {
+const PlaceCard = ({ place, toDetails }) => {
+  let redirectLink = toDetails
+    ? `/place/${place._id}`
+    : `/account/places/${place._id}`;
+
   return (
-    <Card to={`/account/places/${place._id}`}>
+    <Card to={redirectLink}>
       {place.photos.length > 0 && (
         <CardImageContainer>
           <CardImage
@@ -67,14 +76,14 @@ const PlaceCard = ({ place }) => {
           />
         </CardImageContainer>
       )}
-      <CardInfoConatiner>
+      <CardInfoContainer>
         <CardCityState>{`${place.city}, ${place.state}`}</CardCityState>
         <CardMiles>173 miles away</CardMiles>
         <CardDollar>
           ${place.pricePerNight.toFixed(2)}
           <CardText>night</CardText>
         </CardDollar>
-      </CardInfoConatiner>
+      </CardInfoContainer>
     </Card>
   );
 };

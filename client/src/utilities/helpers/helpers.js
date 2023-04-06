@@ -8,3 +8,9 @@ export const getPathname = (pathname) => {
   } else targetPath = "account";
   return targetPath;
 };
+
+export const generateRandomNumber = () => {
+  let maxLimit = 100;
+  const randomNumber = Math.round(Math.random() * maxLimit);
+  return randomNumber;
+};
