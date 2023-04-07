@@ -1,5 +1,5 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { useLayoutEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { UserContextProvider } from "./utilities/context/userContext";
 import axios from "axios";
 
@@ -18,6 +18,12 @@ axios.defaults.baseURL = "http://localhost:4000";
 axios.defaults.withCredentials = true; // req & send cookies
 
 const App = () => {
+  const location = useLocation();
+  // Scroll to top if path changes
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
     <UserContextProvider>
       <Routes>

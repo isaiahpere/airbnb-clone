@@ -12,7 +12,8 @@ export const Flex = styled.div`
 `;
 
 const Section = styled(Flex)`
-  margin-top: 56px;
+  margin: 56px 0px;
+  padding: 0px 14px;
 `;
 
 const HomeModule = () => {
@@ -26,8 +27,6 @@ const HomeModule = () => {
     getAllPlaces();
   }, []);
 
-  console.log("all the places are: ");
-  console.log(allPlaces);
   return (
     <Section>
       <GridContainer>

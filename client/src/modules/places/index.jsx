@@ -9,6 +9,7 @@ import PlaceCard from "../../components/PlaceCard";
 
 const Section = styled.div`
   padding: 0px 10px;
+  margin-bottom: 40px;
   gap: 30px;
   @media (min-width: 550px) {
     padding: 0px 20px;

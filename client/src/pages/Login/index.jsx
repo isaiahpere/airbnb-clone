@@ -10,6 +10,7 @@ const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   height: calc(100vh - 100px);
+  padding: 0px 14px;
 `;
 
 const PageTitle = styled.h1`

@@ -6,6 +6,7 @@ import { Flex } from "../home";
 const Section = styled.div`
   position: absolute;
   inset: 0;
+  z-index: 50000;
   background-color: #fff;
   padding: 10px 20px;
   margin: 0;
@@ -13,7 +14,7 @@ const Section = styled.div`
     padding: 30px;
   }
   @media (min-width: 1200px) {
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 0 auto;
   }
 `;

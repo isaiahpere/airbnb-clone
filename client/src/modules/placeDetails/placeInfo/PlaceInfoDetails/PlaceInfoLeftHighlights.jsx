@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { FiMapPin } from "react-icons/fi";
 import { AiOutlineCalendar } from "react-icons/ai";
 
-import { Flex } from "../../home";
-import { SuperHostIcon } from "../PlaceHeader";
+import { Flex } from "../../../home";
+import { SuperHostIcon } from "../../PlaceHeader";
 
 const highlightData = [
   {
@@ -30,8 +30,9 @@ const HightlightsContainer = styled(Flex)`
 `;
 
 const HighlightIconSuperhost = styled(SuperHostIcon)`
-  font-size: 24px;
+  font-size: 36px;
   margin-right: 10px;
+  padding-bottom: 6px;
 `;
 
 const HighlightIconMap = styled(FiMapPin)`

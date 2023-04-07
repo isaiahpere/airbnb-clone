@@ -12,19 +12,32 @@ const Navlink = styled(Link)`
 
 const Logo = styled(TbBrandAirbnb)`
   font-size: 30px;
-  color: black;
+  color: #ff385c;
+  @media (min-width: 768px) {
+    font-size: 40px;
+  }
+  @media (min-width: 1024px) {
+    font-size: 60px;
+  }
 `;
 
 const LogoText = styled.span`
-  color: #242424;
-  font-weight: 800;
+  font-size: 20px;
+  font-weight: 500;
+  color: #ff385c;
+  @media (min-width: 768px) {
+    font-size: 28px;
+  }
+  @media (min-width: 1024px) {
+    font-size: 30px;
+  }
 `;
 
 const NavLeft = () => {
   return (
     <Navlink to="/">
       <Logo />
-      <LogoText>Airbnb</LogoText>
+      <LogoText>aircnc</LogoText>
     </Navlink>
   );
 };

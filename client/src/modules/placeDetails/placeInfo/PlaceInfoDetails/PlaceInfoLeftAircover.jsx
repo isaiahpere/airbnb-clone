@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Flex } from "../../home";
+import { Flex } from "../../../home";
 
 const Section = styled(Flex)`
   margin-top: 30px;
@@ -11,7 +11,7 @@ const Section = styled(Flex)`
 const TitleContainer = styled.div``;
 
 const Title = styled.span`
-  color: red;
+  color: #ff385c;
   font-size: 44px;
   letter-spacing: -2px;
   font-weight: 600;

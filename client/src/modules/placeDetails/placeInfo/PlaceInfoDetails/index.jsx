@@ -1,20 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 
-import HorizontalRule from "../../../components/HorizontalRule";
+import HorizontalRule from "../../../../components/HorizontalRule";
 import PlaceInfoLeftHeader from "./PlaceInfoLeftHeader";
 import PlaceInfoLeftHighlights from "./PlaceInfoLeftHighlights";
 import PlaceInfoLeftAircover from "./PlaceInfoLeftAircover";
 
 const Section = styled.div`
-  width: 60%;
+  width: 100%;
+  padding: 10px;
+  @media (min-width: 768px) {
+    width: 60%;
+  }
 `;
 
-const Temporary = styled.div`
-  margin-top: 200px;
-`;
-
-const PlaceInfoLeft = ({ place }) => {
+const PlaceInfoDetails = ({ place }) => {
   return (
     <Section>
       <PlaceInfoLeftHeader />
@@ -22,9 +22,8 @@ const PlaceInfoLeft = ({ place }) => {
       <PlaceInfoLeftHighlights />
       <HorizontalRule />
       <PlaceInfoLeftAircover />
-      <Temporary />
     </Section>
   );
 };
 
-export default PlaceInfoLeft;
+export default PlaceInfoDetails;

@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const User = require("./models/User");
 const Place = require("./models/Place");
+const Booking = require("./models/Booking");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const imageDownloader = require("image-downloader");
@@ -319,6 +320,31 @@ app.put("/places", async (req, res) => {
     res.json(updatedPlace);
   } else {
     res.status(422).json("could not update place");
+  }
+});
+
+//*************************** */
+// BOOKINGS
+//*************************** */
+
+/**
+ * save the bookings to database
+ */
+app.post("/bookings", async (req, res) => {
+  try {
+    const { ownerId, placeId } = req.body;
+
+    const savedBooking = await Booking.create({
+      ownerId,
+      placeId,
+    });
+
+    console.log("********");
+    console.log(savedBooking);
+    console.log("********");
+    res.json(`the ownerId === ${ownerId} && placeID === ${placeId}`);
+  } catch (error) {
+    res.status(422).json(error.message ? error.message : error);
   }
 });
 

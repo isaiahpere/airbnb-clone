@@ -28,7 +28,7 @@ const PlaceInfoLinkContainer = styled(Flex)`
   justify-content: space-between;
 `;
 
-const ReviewContainer = styled(Flex)`
+export const ReviewContainer = styled(Flex)`
   justify-content: flex-start;
 `;
 
