@@ -24,7 +24,13 @@ export const Label = styled.label`
   font-size: 18px;
 `;
 
-export const Input = styled.input``;
+export const Input = styled.input`
+  ${(props) =>
+    props.error &&
+    `
+    border: 1px solid #ff385c !important;
+  `}
+`;
 
 const TextArea = styled.textarea`
   border-radius: 6px;
@@ -84,18 +90,22 @@ const NewPlaceFormModule = () => {
 
   // state
   const [title, setTitle] = useState("");
+  const [titleError, setTitleError] = useState(false);
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
+  const [cityError, setCityError] = useState(false);
   const [state, setState] = useState("");
-  const [pricePerNight, setPricePerNight] = useState("");
+  const [stateError, setStateError] = useState("");
+  const [pricePerNight, setPricePerNight] = useState(100);
   const [description, setDescription] = useState("");
   const [perks, setPerks] = useState([]);
   const [additionalInfo, setAdditionalInfo] = useState("");
-  const [checkin, setCheckin] = useState(0);
-  const [checkout, setCheckout] = useState(0);
+  const [checkin, setCheckin] = useState(9);
+  const [checkout, setCheckout] = useState(15);
   const [maxGuest, setMaxGuest] = useState(1);
   const [photoLink, setPhotoLink] = useState("");
   const [addedPhotos, setAddedPhotos] = useState([]);
+  const [photosError, setphotosError] = useState(false);
   const [redirect, setRedirect] = useState("");
 
   // check if id exist - if it does then grab the data for the place
@@ -184,6 +194,34 @@ const NewPlaceFormModule = () => {
   const handleSavePlace = async (e) => {
     e.preventDefault();
 
+    // ****
+    // VALIDATION
+    // ****
+    // check title is not empty
+    if (title.length < 5) {
+      setTitleError(true);
+    } else setTitleError(false);
+
+    if (city.length < 5) {
+      setCityError(true);
+    } else setCityError(false);
+
+    if (state.length < 2) {
+      setStateError(true);
+    } else setStateError(false);
+
+    // check user has at least 6 images for the place
+    if (addedPhotos.length < 6) setphotosError(true);
+
+    // check if form is incomplete
+    if (
+      title.length < 5 ||
+      city.length < 5 ||
+      state.length < 2 ||
+      addedPhotos.length < 6
+    )
+      return;
+
     // no user === send to login
     if (!user) {
       return setRedirect("/login");
@@ -235,6 +273,7 @@ const NewPlaceFormModule = () => {
             placeholder="Title (ie. My Comfy Chome)"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            error={titleError}
           />
         </InputContainer>
         <InputContainer>
@@ -253,6 +292,7 @@ const NewPlaceFormModule = () => {
             placeholder="Los Angeles"
             value={city}
             onChange={(e) => setCity(e.target.value)}
+            error={cityError}
           />
         </InputContainer>
         <InputContainer>
@@ -262,6 +302,7 @@ const NewPlaceFormModule = () => {
             placeholder="State"
             value={state}
             onChange={(e) => setState(e.target.value)}
+            error={stateError}
           />
         </InputContainer>
         <InputContainer>
@@ -298,6 +339,9 @@ const NewPlaceFormModule = () => {
               <Input
                 type="number"
                 placeholder="11"
+                min={1}
+                max={24}
+                step={1}
                 value={checkin}
                 onChange={(e) => setCheckin(e.target.value)}
               />
@@ -306,6 +350,9 @@ const NewPlaceFormModule = () => {
               <CheckinSubtitle>Check-Out Time</CheckinSubtitle>
               <Input
                 type="number"
+                min={1}
+                max={24}
+                step={1}
                 placeholder="15"
                 value={checkout}
                 onChange={(e) => setCheckout(e.target.value)}
@@ -315,6 +362,7 @@ const NewPlaceFormModule = () => {
               <CheckinSubtitle>Max Guest</CheckinSubtitle>
               <Input
                 type="number"
+                max={20}
                 placeholder="12"
                 value={maxGuest}
                 onChange={(e) => setMaxGuest(e.target.value)}
@@ -329,6 +377,7 @@ const NewPlaceFormModule = () => {
           handleAddedPhotos={setAddedPhotos}
           handleBulkPhotoHandler={handleBulkPhotoUpload}
           selectedBulkPhotos={addedPhotos}
+          photoUploadError={photosError}
         />
         <ButtonContainer>
           <SubmitButton type="submit">Save</SubmitButton>

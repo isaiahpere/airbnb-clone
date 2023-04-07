@@ -26,7 +26,10 @@ const LinkUploadButton = styled.button`
 
 const PhotosContainer = styled.div``;
 
+const UploadBoxContainer = styled.div``;
+
 const UploadBox = styled.label`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,11 +41,27 @@ const UploadBox = styled.label`
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.5s ease;
-  overflow: hidden;
+  ${(props) =>
+    props.error &&
+    `
+    border: solid 1px #ff385c;
+  `}
 
   &:hover {
     background-color: #dddddd;
   }
+`;
+
+const UploadBoxError = styled.div`
+  color: red;
+  font-size: 12px;
+  font-weight: 400;
+  display: none;
+  ${(props) =>
+    props.error &&
+    `
+    display: block;
+  `}
 `;
 
 const BoxContentContainer = styled.div`
@@ -159,6 +178,7 @@ const PhotosForms = ({
   handleBulkPhotoHandler,
   handleAddedPhotos,
   selectedBulkPhotos,
+  photoUploadError,
 }) => {
   let primaryPhoto = selectedBulkPhotos[0];
 
@@ -200,13 +220,22 @@ const PhotosForms = ({
         </LinkUploadButton>
       </LinkUploadContainer>
       <PhotosContainer>
-        <UploadBox>
-          <FileUploaderInput type="file" multiple onChange={handleBulkPhtos} />
-          <BoxContentContainer>
-            <UploadIcon />
-            <UploadText>Upload</UploadText>
-          </BoxContentContainer>
-        </UploadBox>
+        <UploadBoxContainer>
+          <UploadBox error={photoUploadError}>
+            <FileUploaderInput
+              type="file"
+              multiple
+              onChange={handleBulkPhtos}
+            />
+            <BoxContentContainer>
+              <UploadIcon />
+              <UploadText>Upload</UploadText>
+            </BoxContentContainer>
+          </UploadBox>
+          <UploadBoxError error={photoUploadError}>
+            * Minimum requirement of 6 photos
+          </UploadBoxError>
+        </UploadBoxContainer>
         <GridContainer>
           {selectedBulkPhotos.length > 0 &&
             selectedBulkPhotos.map((item) => (

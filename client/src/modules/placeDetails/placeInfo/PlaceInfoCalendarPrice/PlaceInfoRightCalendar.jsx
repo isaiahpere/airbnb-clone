@@ -91,8 +91,9 @@ const PlaceInfoRightCalendar = ({ place }) => {
   const totalPrice = (place.pricePerNight * 8).toLocaleString().split(".")[0];
 
   const handleReservation = async () => {
-    if (!place._id || !user.id) return;
+    if (!place?._id || !user?.id) return setRedirect("/login");
 
+    console.log("SHOULD NOT SHOW UP");
     // make request to save booking
     const response = await axios.post("/bookings", {
       ownerId: user.id,

@@ -338,14 +338,39 @@ app.post("/bookings", async (req, res) => {
       ownerId,
       placeId,
     });
-
-    console.log("********");
-    console.log(savedBooking);
-    console.log("********");
     res.json(`the ownerId === ${ownerId} && placeID === ${placeId}`);
   } catch (error) {
     res.status(422).json(error.message ? error.message : error);
   }
+});
+
+app.get("/bookings", async (req, res) => {
+  const { userId, placeId } = req.body;
+
+  try {
+    // check token exist
+    const { token } = req.cookies;
+    if (!token) throw new Error("no jwt token provided");
+
+    // verify token to get user id
+    const verifiedToken = jwt.verify(token, jwtSecret, {});
+    const { id } = verifiedToken;
+
+    // find all bookings by userId
+    const bookings = await Booking.find({ ownerId: id }).populate({
+      path: "placeId",
+    });
+    res.json(bookings);
+  } catch (error) {
+    res.status(404).json("not found");
+  }
+});
+
+app.delete("/booking", async (req, res) => {
+  const { ownerId, placeId, bookingId } = req.body;
+  await Booking.deleteOne({ _id: bookingId });
+
+  res.json(`bookingId: ${bookingId} - deleted`);
 });
 
 /**

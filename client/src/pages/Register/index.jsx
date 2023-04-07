@@ -63,12 +63,12 @@ const Register = () => {
   const [inputName, setInputName] = useState("");
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
-  const [redirect, setRedirect] = useState(false);
+  const [redirect, setRedirect] = useState("");
 
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
-    if (user) setRedirect(true);
+    if (user) setRedirect("/");
   }, [user]);
 
   // handle form submission
@@ -82,11 +82,9 @@ const Register = () => {
         email: inputEmail,
         password: inputPassword,
       });
-      console.log(res);
-      alert("registration successful - Welcome");
+      setUser(res.data);
     } catch (error) {
       console.log(error);
-      alert("registration failed - try again");
     }
 
     // reset values
@@ -96,7 +94,7 @@ const Register = () => {
   };
 
   // redirect if authenticated
-  if (redirect) return <Navigate to="/" />;
+  if (redirect) return <Navigate to={redirect} />;
 
   return (
     <Container>
