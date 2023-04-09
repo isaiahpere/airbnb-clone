@@ -71,9 +71,7 @@ const PlaceCard = ({ place, toDetails }) => {
     <Card to={redirectLink}>
       {place.photos.length > 0 && (
         <CardImageContainer>
-          <CardImage
-            src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${place.photos[0]}`}
-          />
+          <CardImage src={place.photos[0].url} />
         </CardImageContainer>
       )}
       <CardInfoContainer>

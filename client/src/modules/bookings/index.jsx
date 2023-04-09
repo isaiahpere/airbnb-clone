@@ -27,7 +27,7 @@ const MessageIcon = styled(ImSad)`
 const BookingsModule = ({ allBookings }) => {
   // handler to delete one booked reservation
   const handleDeleteBooking = async ({ ownerId, placeId, bookingId }) => {
-    axios.delete("/booking", { data: { ownerId, placeId, bookingId } });
+    axios.delete("/bookings", { data: { ownerId, placeId, bookingId } });
 
     // reload page
     window.location.reload(false);

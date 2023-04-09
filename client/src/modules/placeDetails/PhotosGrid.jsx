@@ -11,6 +11,7 @@ const Container = styled.div`
   grid-template-columns: 2fr 1fr 1fr;
   width: 100%;
   gap: 5px;
+  overflow: hidden;
   @media (min-width: 768px) {
     display: grid;
     height: 500px;
@@ -26,14 +27,44 @@ const Container = styled.div`
 const GridColumnContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
+  width: 100%;
   height: 100%;
   gap: 5px;
+  @media (min-width: 768px) {
+    display: grid;
+    height: 500px;
+  }
+  @media (min-width: 1024px) {
+    height: 540px;
+  }
+  @media (min-width: 1440px) {
+    height: 540px;
+  }
+`;
+
+const GridItemFull = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 24px 0px 0px 24px;
+  @media (min-width: 768px) {
+    height: 500px;
+  }
+  @media (min-width: 1024px) {
+    height: 540px;
+  }
 `;
 
 const GridItem = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  @media (min-width: 768px) {
+    height: 250px;
+  }
+  @media (min-width: 1024px) {
+    height: 270px;
+  }
   ${(props) =>
     props.roundedTopRight &&
     `
@@ -43,11 +74,6 @@ const GridItem = styled.img`
     props.roundedBottomRight &&
     `
       border-radius: 0px 0px 24px 0px;
-  `}
-  ${(props) =>
-    props.roundedReverse &&
-    `
-      border-radius: 24px 0px 0px 24px;
   `}
 `;
 
@@ -63,7 +89,7 @@ const SingleImageContainer = styled.div`
 
 const MainImage = styled.img`
   width: 100%;
-  height: 100%;
+  max-height: 320px;
   object-fit: cover;
 `;
 
@@ -105,27 +131,14 @@ const PhotosGrid = ({ place, onChangeAllPhotos }) => {
     <>
       {isAtLeastTablet && (
         <Container>
-          <GridItem
-            src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${place.photos[0]}`}
-            roundedReverse
-          />
+          <GridItemFull src={place.photos[0].url} />
           <GridColumnContainer>
-            <GridItem
-              src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${place.photos[1]}`}
-            />
-            <GridItem
-              src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${place.photos[2]}`}
-            />
+            <GridItem src={place.photos[1].url} />
+            <GridItem src={place.photos[2].url} />
           </GridColumnContainer>
           <GridColumnContainer>
-            <GridItem
-              roundedTopRight
-              src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${place.photos[3]}`}
-            />
-            <GridItem
-              roundedBottomRight
-              src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${place.photos[4]}`}
-            />
+            <GridItem roundedTopRight src={place.photos[3].url} />
+            <GridItem roundedBottomRight src={place.photos[4].url} />
           </GridColumnContainer>
           <MoreImagesContainer onClick={handleShowAllPhotos}>
             <SquareDotIcon />
@@ -135,10 +148,7 @@ const PhotosGrid = ({ place, onChangeAllPhotos }) => {
       )}
       {!isAtLeastTablet && (
         <SingleImageContainer>
-          <MainImage
-            onClick={handleShowAllPhotos}
-            src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${place.photos[0]}`}
-          />
+          <MainImage onClick={handleShowAllPhotos} src={place.photos[0].url} />
         </SingleImageContainer>
       )}
     </>

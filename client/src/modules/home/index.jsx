@@ -21,7 +21,7 @@ const HomeModule = () => {
 
   useEffect(() => {
     const getAllPlaces = async () => {
-      const places = await axios.get("/all-places");
+      const places = await axios.get("/places");
       setAllPlaces(places.data);
     };
     getAllPlaces();

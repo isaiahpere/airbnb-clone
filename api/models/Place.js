@@ -7,7 +7,7 @@ const placeSchema = new mongoose.Schema({
   city: String,
   state: String,
   pricePerNight: Number,
-  photos: [String],
+  photos: [{ url: String, filename: String }],
   description: String,
   perks: [String],
   additionalInfo: String,

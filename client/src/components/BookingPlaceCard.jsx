@@ -61,13 +61,14 @@ const BookingPlaceCard = ({ place, booking, deleteBooking }) => {
     });
   };
 
+  console.log("place");
+  console.log(place);
+
   return (
     <Card>
       {place.photos.length > 0 && (
         <CardImageContainer>
-          <CardImage
-            src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${place.photos[0]}`}
-          />
+          <CardImage src={place.photos[0].url} />
         </CardImageContainer>
       )}
       <CancelContainer onClick={handleBookingCancel}>

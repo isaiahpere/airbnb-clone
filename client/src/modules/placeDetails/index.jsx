@@ -17,7 +17,7 @@ const PlaceDetailsModule = () => {
   useEffect(() => {
     if (!id) return;
     const getPlace = async () => {
-      const { data } = await axios.get(`/place/${id}`);
+      const { data } = await axios.get(`/places/${id}`);
       setPlace(data);
     };
     getPlace();
