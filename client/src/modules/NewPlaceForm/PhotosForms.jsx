@@ -239,10 +239,15 @@ const PhotosForms = ({
         <GridContainer>
           {selectedBulkPhotos.length > 0 &&
             selectedBulkPhotos.map((item) => (
-              <GridItem key={item}>
-                <GridImage
+              <GridItem key={item.url}>
+                {/* <GridImage
                   src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${item}`}
-                />
+                /> */}
+                {/* 
+                
+                NEED TO UPDATE THE CLIENT TO TAKE CLOUDINARY IMAGES
+                */}
+                <GridImage src={item.url} />
                 <TrashContainer>
                   <TrashCan onClick={() => handleRemovePhoto(item)} />
                 </TrashContainer>

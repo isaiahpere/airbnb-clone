@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -11,9 +15,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const imageDownloader = require("image-downloader");
 const multer = require("multer"); // middleware
-const multerUploads = multer({ dest: "uploads/" });
+const { storage } = require("./cloudinary/index");
+const multerUploads = multer({ storage });
 const fs = require("fs");
-require("dotenv").config();
 
 // server port
 const PORT = 4000;
@@ -144,20 +148,19 @@ app.post("/link-uploads", async (req, res) => {
 /**
  * POST - handles photo uploads to uploads folder.
  */
-app.post("/upload", multerUploads.array("photos", 12), (req, res) => {
-  const uploadedFiles = [];
+app.post("/upload", multerUploads.array("photos", 10), (req, res) => {
+  const imageFiles = [];
 
-  req.files.forEach((file) => {
-    // get extension, re-write file with extension & push to array
+  // NEED TO UPDATE API ROUTES FOR PLACE TO TAKE CLOUDINARY {URL, PATHNAME}
 
-    const { path, filename, originalname } = file;
-    const fileExtension = originalname.split(".").slice(-1)[0];
-    const newFilename = `${filename}.${fileExtension}`;
-    fs.renameSync(path, `${path}.${fileExtension}`);
-    uploadedFiles.push(newFilename);
-  });
+  // get the image data from multer-cloudinary-storage store in array
+  if (req.files && req.files.length > 0) {
+    req.files.forEach((file) => {
+      imageFiles.push({ url: file.path, filname: file.filename });
+    });
+  }
 
-  res.json(uploadedFiles);
+  res.json(imageFiles);
 });
 
 /**
