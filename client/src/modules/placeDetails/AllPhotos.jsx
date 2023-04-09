@@ -76,10 +76,7 @@ const AllPhotos = ({ onTogglePhotosModal, photos }) => {
       </HeaderContainer>
       <PhotosContainer>
         {photos.map((photo) => (
-          <PhotoImage
-            key={photo}
-            src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${photo}`}
-          />
+          <PhotoImage key={photo.url} src={photo.url} />
         ))}
       </PhotosContainer>
     </Section>
