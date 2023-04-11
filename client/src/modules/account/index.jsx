@@ -51,6 +51,7 @@ const AccountModule = () => {
     }
   };
 
+  if (!user) return <Navigate to="/login" />;
   if (redirect) return <Navigate to={redirect} />;
 
   return (

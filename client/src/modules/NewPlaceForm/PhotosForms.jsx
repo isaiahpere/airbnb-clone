@@ -3,26 +3,8 @@ import styled from "styled-components/macro";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
 
-import { Label, InputContainer, Input } from ".";
+import { Label, InputContainer } from ".";
 import { Flex } from "../home";
-
-const LinkUploadContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 14px;
-`;
-
-const LinkUploadButton = styled.button`
-  width: 100px;
-  border: none;
-  background-color: #b7b7b7;
-  height: 30px;
-  border-radius: 24px;
-  height: 40px;
-  color: #242424;
-  cursor: pointer;
-`;
 
 const PhotosContainer = styled.div``;
 
@@ -172,20 +154,12 @@ const PrimaryPhoto = styled.div`
 `;
 
 const PhotosForms = ({
-  photoUrl,
-  setPhotoUrl,
-  handleAddPhotoUrl,
   handleBulkPhotoHandler,
   handleAddedPhotos,
   selectedBulkPhotos,
   photoUploadError,
 }) => {
   let primaryPhoto = selectedBulkPhotos[0];
-
-  // handle photo url upload
-  const handlePhotUrl = (e) => {
-    setPhotoUrl(e.target.value);
-  };
 
   // handle bulk photo upload
   const handleBulkPhtos = (e) => {
@@ -208,17 +182,6 @@ const PhotosForms = ({
   return (
     <InputContainer>
       <Label>Photos</Label>
-      <LinkUploadContainer>
-        <Input
-          type="text"
-          placeholder="Add using link"
-          value={photoUrl}
-          onChange={handlePhotUrl}
-        />
-        <LinkUploadButton onClick={handleAddPhotoUrl}>
-          Add Photo
-        </LinkUploadButton>
-      </LinkUploadContainer>
       <PhotosContainer>
         <UploadBoxContainer>
           <UploadBox error={photoUploadError}>
@@ -240,13 +203,6 @@ const PhotosForms = ({
           {selectedBulkPhotos.length > 0 &&
             selectedBulkPhotos.map((item) => (
               <GridItem key={item.url}>
-                {/* <GridImage
-                  src={`${process.env.REACT_APP_API_PHOTO_UPLOAD_URL}${item}`}
-                /> */}
-                {/* 
-                
-                NEED TO UPDATE THE CLIENT TO TAKE CLOUDINARY IMAGES
-                */}
                 <GridImage src={item.url} />
                 <TrashContainer>
                   <TrashCan onClick={() => handleRemovePhoto(item)} />
