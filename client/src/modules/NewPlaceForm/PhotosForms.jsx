@@ -49,7 +49,7 @@ const UploadBoxError = styled.div`
 const BoxContentContainer = styled.div`
   display: flex;
   align-items: center;
-  padding-bottom: 20px;
+  padding-bottom: 18px;
 `;
 
 const FileUploaderInput = styled.input`
@@ -57,7 +57,8 @@ const FileUploaderInput = styled.input`
 `;
 
 const UploadIcon = styled(AiOutlineCloudUpload)`
-  font-size: 18px;
+  font-size: 20px;
+  margin-right: 4px;
   color: #242424;
 `;
 
