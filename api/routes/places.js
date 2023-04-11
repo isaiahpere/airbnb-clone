@@ -15,6 +15,6 @@ router.get("/:id", getSinglePlace);
 
 router.get(`/byowner/:userId`, getAllPlacesByOwner);
 
-router.put("/places", updateSinglePlace);
+router.put("/", updateSinglePlace);
 
 module.exports = router;

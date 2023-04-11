@@ -58,6 +58,7 @@ const getAllPlacesByOwner = async (req, res) => {
 };
 
 const updateSinglePlace = async (req, res) => {
+  const placeId = req.body.placeId;
   const place = {
     owner: req.body.ownerId,
     title: req.body.title,
@@ -76,11 +77,15 @@ const updateSinglePlace = async (req, res) => {
 
   // find the place so we can compare the owner to the
   // owner requesting the PUT request
-  const foundPlace = await Place.findById(placeId);
+  const foundPlace = await Place.findById(req.body.placeId);
 
   // update only if owner owns the place that needs to be updated
-  if (foundPlace.owner.toString() === ownerId) {
-    const updatedPlace = await Place.updateOne({ _id: placeId }, { place });
+  if (foundPlace.owner.toString() === req.body.ownerId) {
+    console.log(`state ${req.body.state}`);
+    const updatedPlace = await Place.findOneAndUpdate({ _id: placeId }, place);
+
+    console.log("updatedPalce");
+    console.log(updatedPlace);
     res.json(updatedPlace);
   } else {
     res.status(422).json("could not update place");
