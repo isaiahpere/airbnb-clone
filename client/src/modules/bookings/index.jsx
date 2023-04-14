@@ -33,8 +33,6 @@ const BookingsModule = ({ allBookings }) => {
     window.location.reload(false);
   };
 
-  console.log(allBookings);
-
   return (
     <>
       {allBookings.length < 1 && (

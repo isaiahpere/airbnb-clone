@@ -90,16 +90,15 @@ const PlaceInfoRightCalendar = ({ place }) => {
   // convert price to commas number
   const totalPrice = (place.pricePerNight * 8).toLocaleString().split(".")[0];
 
+  // handle reserving booking
   const handleReservation = async () => {
     if (!place?._id || !user?.id) return setRedirect("/login");
 
-    console.log("SHOULD NOT SHOW UP");
     // make request to save booking
-    const response = await axios.post("/bookings", {
+    await axios.post("/bookings", {
       ownerId: user.id,
       placeId: place._id,
     });
-    console.log(response);
     setRedirect("/account/bookings");
   };
 

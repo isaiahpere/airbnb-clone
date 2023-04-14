@@ -82,6 +82,7 @@ const Register = () => {
         email: inputEmail,
         password: inputPassword,
       });
+
       setUser(res.data);
     } catch (error) {
       console.log(error);

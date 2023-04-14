@@ -15,10 +15,6 @@ const Bookings = () => {
   useEffect(() => {
     const getAllBookings = async () => {
       const { data } = await axios.get("/bookings");
-      console.log("**************");
-      console.log("printing all bookings");
-      console.log(data);
-      console.log("**************");
 
       setBookings(data);
     };

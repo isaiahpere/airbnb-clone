@@ -61,9 +61,6 @@ const BookingPlaceCard = ({ place, booking, deleteBooking }) => {
     });
   };
 
-  console.log("place");
-  console.log(place);
-
   return (
     <Card>
       {place.photos.length > 0 && (

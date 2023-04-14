@@ -115,7 +115,6 @@ const NewPlaceFormModule = () => {
     const getPlace = async () => {
       const placeInfo = await axios.get(`/places/${id}`);
       if (placeInfo) {
-        console.log(placeInfo);
         setTitle(placeInfo.data?.title);
         setAddress(placeInfo.data?.address);
         setCity(placeInfo.data?.city);
@@ -246,15 +245,13 @@ const NewPlaceFormModule = () => {
 
     // id === place needs to be updated
     if (id) {
-      const updatedPlace = await axios.put("/places", {
+      await axios.put("/places", {
         placeId: id,
         ...placeData,
       });
-      console.log(updatedPlace);
     } else {
       // !id === place needs to be created
-      const { data } = await axios.post("/places", placeData);
-      console.log(data);
+      await axios.post("/places", placeData);
     }
 
     // redirect to places

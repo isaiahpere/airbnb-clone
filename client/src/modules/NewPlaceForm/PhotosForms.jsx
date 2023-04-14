@@ -174,7 +174,6 @@ const PhotosForms = ({
 
   // moves the photo to the beginning of the addedPhotos to make it primary
   const handlePrimaryPhotoChange = (photo) => {
-    console.log("changing primary");
     handleAddedPhotos((prev) => [
       photo,
       ...prev.filter((item) => item !== photo),
