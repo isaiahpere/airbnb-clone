@@ -10,37 +10,32 @@ const jwtSecret = process.env.JWT_SECRET;
  *  handle login request
  */
 const login = async (req, res) => {
-  // destruct body
+  // destruct
   const { email, password } = req.body;
 
-  // find user
+  // check user exist if not throw error
   const user = await User.findOne({ email });
+  if (!user) throw new Error("No user found");
 
-  // check if user exist
-  if (user) {
-    const passOk = bcrypt.compareSync(password, user.password);
-    // check password okay
-    if (passOk) {
-      // create token to send in cookie
-      const token = jwt.sign({ email: user.email, id: user._id }, jwtSecret, {
-        expiresIn: "12h",
-      });
+  // check user password
+  const passOk = bcrypt.compareSync(password, user.password);
 
-      // check token was signed successfully
-      if (token) {
-        res
-          .cookie("token", token)
-          .json({ user: { name: user.name, email: user.email, id: user._id } });
-      } else {
-        throw new Error("No Token generated -  login [post]");
-      }
+  if (passOk) {
+    // create token to send in cookie
+    const token = jwt.sign({ email: user.email, id: user._id }, jwtSecret, {
+      expiresIn: "12h",
+    });
+
+    // check token was signed successfully
+    if (token) {
+      res
+        .cookie("token", token)
+        .json({ user: { name: user.name, email: user.email, id: user._id } });
     } else {
-      res.status(422).json({ error: "password not match" });
+      throw new Error("No Token generated -  login [post]");
     }
-    // no user throw error
   } else {
-    // if no user then respons with no user found
-    res.status(422).json({ error: "user not found" });
+    res.status(422).json({ error: "password not match" });
   }
 };
 

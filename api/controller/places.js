@@ -81,11 +81,8 @@ const updateSinglePlace = async (req, res) => {
 
   // update only if owner owns the place that needs to be updated
   if (foundPlace.owner.toString() === req.body.ownerId) {
-    console.log(`state ${req.body.state}`);
     const updatedPlace = await Place.findOneAndUpdate({ _id: placeId }, place);
 
-    console.log("updatedPalce");
-    console.log(updatedPlace);
     res.json(updatedPlace);
   } else {
     res.status(422).json("could not update place");

@@ -1,6 +1,10 @@
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const bcryptSalt = bcrypt.genSaltSync(10);
+
+// bcrypt
+const jwtSecret = process.env.JWT_SECRET;
 
 /**
  * POST -
@@ -24,10 +28,16 @@ const registerUser = async (req, res) => {
       password: bcrypt.hashSync(password, bcryptSalt),
     });
 
-    // FIX-ME - should create token upon registration as well not just when login
+    // create token to send in cookie
+    const token = jwt.sign({ email: user.email, id: user._id }, jwtSecret, {
+      expiresIn: "12h",
+    });
 
-    // response with user collection created
-    res.json(user);
+    if (token) {
+      res
+        .cookie("token", token)
+        .json({ name: user.name, email: user.email, id: user._id });
+    }
   } catch (error) {
     console.log(error);
     res.status(422).json(error);
