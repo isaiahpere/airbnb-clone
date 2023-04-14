@@ -13,7 +13,6 @@ const CardImageContainer = styled(Flex)`
   justify-content: flex-start;
   display: block;
   height: 286px;
-  background-color: red;
   border-radius: 24px;
   @media (min-width: 1130px) {
     height: 260px;

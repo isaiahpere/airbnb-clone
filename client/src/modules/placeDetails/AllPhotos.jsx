@@ -64,8 +64,6 @@ const AllPhotos = ({ onTogglePhotosModal, photos }) => {
 
   if (!photos || photos.length < 1) onTogglePhotosModal(false);
 
-  console.log(photos);
-
   return (
     <Section>
       <HeaderContainer>
