@@ -14,7 +14,8 @@ import Places from "./pages/Places";
 import PlaceFormPage from "./pages/PlacesForm";
 import PlaceDetailsModule from "./modules/placeDetails";
 
-axios.defaults.baseURL = "http://localhost:4000";
+// axios defaults
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true; // req & send cookies
 
 const App = () => {
