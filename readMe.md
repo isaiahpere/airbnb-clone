@@ -11,7 +11,7 @@ This project is a clone of the popular vacation rental platform, Airbnb. It is a
 * MongoDB
 
 ## Architecture
-The project follows a model-view-controller (MVC) architecture, with separate folders for the models, views, and controllers of each feature. The backend is built with Node.js and Express, and uses Mongoose to interact with the MongoDB database. The frontend is built with React and uses React & styled-components for UI components.
+The project follows a model-view-controller (MVC) architecture, with separate folders for the models, views, and controllers of each feature. The backend is built with Node.js and Express, and uses Mongoose to interact with the MongoDB database. The frontend is built with React and uses styled-components for building elegant UI.
 
 ## Features
 * User registration & authentication
