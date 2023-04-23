@@ -1,1 +1,1 @@
-#Airbnb Clone#
+# Airbnc Simple Clone
